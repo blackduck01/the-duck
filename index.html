@@ -3,139 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Duck Personality Test</title>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
+    <title>The Duck Lab: 오리 연구소</title>
     <style>
-        /* Global Reset & Font */
-        body { margin: 0; padding: 0; font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background-color: #fff9c4; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        /* 🎨 디자인: 깔끔하고 트렌디한 카드형 레이아웃 */
+        body { margin: 0; padding: 0; font-family: 'Apple SD Gothic Neo', sans-serif; background-color: #f0f2f5; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
         
-        /* Container Layout */
-        #root { width: 100%; max-width: 420px; padding: 20px; }
-        .app-container { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; border: 2px solid #fbc02d; transition: all 0.3s ease; }
-        
-        /* Typography */
-        h1 { color: #333; font-size: 22px; font-weight: 800; margin-bottom: 12px; line-height: 1.4; }
-        p { color: #666; font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
-        
-        /* UI Components */
-        .duck-icon { font-size: 64px; margin: 20px 0; animation: bounce 2s infinite; }
-        .btn { width: 100%; padding: 16px; margin: 8px 0; border: none; border-radius: 12px; background-color: #fdd835; color: #333; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.1s, background-color 0.2s; }
-        .btn:active { transform: scale(0.98); }
-        .btn:hover { background-color: #fbc02d; }
-        
-        /* Progress Bar */
-        .progress-container { width: 100%; background-color: #f0f0f0; border-radius: 8px; height: 8px; margin-bottom: 30px; overflow: hidden; }
-        .progress-fill { height: 100%; background-color: #f9a825; transition: width 0.4s ease; }
+        /* 헤더 (로고 영역) */
+        header { text-align: center; margin-bottom: 30px; padding: 20px 0; }
+        h1 { margin: 0; color: #333; font-size: 28px; font-weight: 800; }
+        p { color: #666; font-size: 14px; margin-top: 5px; }
+        .logo { font-size: 50px; display: block; margin-bottom: 10px; animation: bounce 2s infinite; }
 
-        /* Animations */
+        /* 테스트 목록 (그리드) */
+        .test-list { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        /* 카드 스타일 */
+        .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s; cursor: pointer; text-decoration: none; color: inherit; border: 2px solid transparent; }
+        .card:hover { transform: translateY(-5px); border-color: #FFD600; }
+        
+        .card-img { width: 100%; height: 120px; background-color: #eee; display: flex; align-items: center; justify-content: center; font-size: 50px; }
+        .card-body { padding: 15px; }
+        .card-title { font-weight: bold; font-size: 16px; margin-bottom: 5px; display: block; }
+        .card-desc { font-size: 12px; color: #888; display: block; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; margin-bottom: 5px; }
+
+        /* 색상 테마 */
+        .office { background-color: #FFF9C4; } /* 노랑 */
+        .love { background-color: #FFEBEE; }   /* 분홍 */
+        .friend { background-color: #E3F2FD; } /* 파랑 */
+        .money { background-color: #E8F5E9; }  /* 초록 */
+
+        /* 광고 영역 */
+        .ad-banner { width: 100%; height: 100px; background: #ddd; margin: 20px 0; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 12px; }
+
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 모바일 대응 */
+        @media (max-width: 400px) { .test-list { grid-template-columns: 1fr; } } /* 화면 작으면 1줄로 */
     </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState } = React;
+<div class="container">
+    <header>
+        <span class="logo">🦆</span>
+        <h1>The Duck Lab</h1>
+        <p>나쨩의 심리테스트 연구소에 오신 걸 환영합니다!</p>
+    </header>
 
-        // [DATA] 질문 및 결과 데이터 정의
-        const QUESTIONS = [
-            { id: 1, q: "새로운 프로젝트 팀에 배정되었다. 나의 첫 행동은?", a: "팀원들에게 먼저 다가가 밝게 인사를 건넨다.", b: "조용히 내 자리를 파악하고 업무 자료를 검토한다.", type: "EI" },
-            { id: 2, q: "동료가 업무 실수로 크게 상심해 있다.", a: "괜찮아! 술 한잔하면서 털어버리자! (정서적 지지)", b: "어떤 부분에서 문제가 생겼어? 같이 해결책을 찾자. (현실적 조언)", type: "TF" },
-            { id: 3, q: "다음 주 워크샵 일정을 기획해야 한다.", a: "시간대별 이동 경로와 예산을 엑셀로 정리한다.", b: "큰 틀만 잡고 상황에 따라 유동적으로 움직인다.", type: "JP" }
-        ];
+    <div class="ad-banner">💰 상단 광고 영역 💰</div>
 
-        // [COMPONENT] 메인 어플리케이션
-        function App() {
-            const [step, setStep] = useState(0); // 0: Start, 1~N: Question, N+1: Result
-            const [scores, setScores] = useState({ E: 0, I: 0, T: 0, F: 0, J: 0, P: 0 });
+    <div class="test-list">
+        
+        <a href="office.html" class="card">
+            <div class="card-img office">💼</div>
+            <div class="card-body">
+                <span class="badge" style="background:#FFF176; color:#555;">BEST</span>
+                <span class="card-title">직장인 생존 유형</span>
+                <span class="card-desc">나는 팩폭러일까? 힐링러일까? 소름 돋는 직장 자아 찾기</span>
+            </div>
+        </a>
 
-            // 핸들러: 답변 선택 시 점수 계산 및 다음 단계 이동
-            const handleAnswer = (type, choiceIndex) => {
-                const targetType = choiceIndex === 0 ? type[0] : type[1]; // A선택시 앞글자, B선택시 뒷글자
-                setScores(prev => ({ ...prev, [targetType]: prev[targetType] + 1 }));
-                setStep(prev => prev + 1);
-            };
+        <div class="card" onclick="alert('두근두근! 곧 오픈 예정입니다! 💖')">
+            <div class="card-img love">💘</div>
+            <div class="card-body">
+                <span class="badge" style="background:#FFCDD2; color:#555;">COMING SOON</span>
+                <span class="card-title">나의 연애 세포 레벨</span>
+                <span class="card-desc">죽어가는 연애 세포 심폐소생술! 내 연애 스타일은?</span>
+            </div>
+        </div>
 
-            // 핸들러: 테스트 리셋
-            const resetTest = () => {
-                setStep(0);
-                setScores({ E: 0, I: 0, T: 0, F: 0, J: 0, P: 0 });
-            };
+        <div class="card" onclick="alert('친구랑 싸우지 마세요! 곧 나옵니다! 👯‍♀️')">
+            <div class="card-img friend">👯‍♀️</div>
+            <div class="card-body">
+                <span class="badge" style="background:#BBDEFB; color:#555;">COMING SOON</span>
+                <span class="card-title">찐친 판독기</span>
+                <span class="card-desc">우리는 평생 갈 친구일까? 소름 돋는 우정 궁합</span>
+            </div>
+        </div>
 
-            // 렌더링: 단계(Step)에 따른 화면 분기
-            return (
-                <div className="app-container fade-in">
-                    {step === 0 && <StartScreen onStart={() => setStep(1)} />}
-                    {step >= 1 && step <= QUESTIONS.length && (
-                        <QuestionScreen 
-                            data={QUESTIONS[step - 1]} 
-                            currentStep={step} 
-                            totalSteps={QUESTIONS.length} 
-                            onAnswer={handleAnswer} 
-                        />
-                    )}
-                    {step > QUESTIONS.length && <ResultScreen scores={scores} onReset={resetTest} />}
-                </div>
-            );
-        }
+        <div class="card" onclick="alert('부자 되세요! 곧 오픈합니다! 💸')">
+            <div class="card-img money">💸</div>
+            <div class="card-body">
+                <span class="badge" style="background:#C8E6C9; color:#555;">COMING SOON</span>
+                <span class="card-title">숨은 돈복 찾기</span>
+                <span class="card-desc">나는 평생 얼마를 벌까? 재미로 보는 나의 재물운</span>
+            </div>
+        </div>
 
-        // [SUB-COMPONENT] 시작 화면
-        function StartScreen({ onStart }) {
-            return (
-                <div>
-                    <h1>🦁 The Duck<br/>직장인 생존 유형 분석</h1>
-                    <div className="duck-icon">🦆</div>
-                    <p>정글 같은 오피스 라이프,<br/>나는 어떤 생존 전략을 가진 오리일까?</p>
-                    <button className="btn" onClick={onStart}>테스트 시작하기</button>
-                </div>
-            );
-        }
+    </div>
 
-        // [SUB-COMPONENT] 질문 화면
-        function QuestionScreen({ data, currentStep, totalSteps, onAnswer }) {
-            const progress = ((currentStep / totalSteps) * 100) + "%";
-            
-            return (
-                <div>
-                    <div className="progress-container">
-                        <div className="progress-fill" style={{ width: progress }}></div>
-                    </div>
-                    <div className="duck-icon">🤔</div>
-                    <h2>Q{currentStep}.</h2>
-                    <p style={{ fontSize: '18px', fontWeight: 'bold', color: '#333' }}>{data.q}</p>
-                    <button className="btn" onClick={() => onAnswer(data.type, 0)}>{data.a}</button>
-                    <button className="btn" onClick={() => onAnswer(data.type, 1)}>{data.b}</button>
-                </div>
-            );
-        }
+    <div class="ad-banner">💰 하단 광고 영역 💰</div>
+    
+    <footer style="text-align:center; margin-top:30px; color:#aaa; font-size:12px;">
+        &copy; 2025 The Duck Lab. All rights reserved.
+    </footer>
+</div>
 
-        // [SUB-COMPONENT] 결과 화면
-        function ResultScreen({ scores, onReset }) {
-            // 결과 도출 로직 (Simple Logic)
-            const resultType = scores.E > scores.I ? "열정적인 불꽃오리 🔥" : "신중한 선비오리 🌲";
-            const description = scores.E > scores.I 
-                ? "당신은 조직의 분위기 메이커입니다. 뛰어난 소통 능력으로 팀의 에너지를 책임지네요!" 
-                : "당신은 묵묵히 성과를 내는 숨은 에이스입니다. 깊이 있는 통찰력으로 문제를 해결하네요!";
-
-            return (
-                <div className="fade-in">
-                    <h1>분석 결과</h1>
-                    <div className="duck-icon">👑</div>
-                    <h2 style={{ color: '#f57f17' }}>{resultType}</h2>
-                    <p>{description}</p>
-                    <button className="btn" onClick={onReset}>테스트 다시 하기</button>
-                </div>
-            );
-        }
-
-        // DOM 렌더링
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
 </body>
 </html>
