@@ -1,33 +1,90 @@
-    <style>
-        /* 폰트 불러오기 (프리텐다드 - 깔끔하고 세련됨) */
-        @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Duck Lab: 오리 연구소</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
 
-        body { margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; background-color: #f0f2f5; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        
-        header { text-align: center; margin-bottom: 30px; padding: 20px 0; }
-        h1 { margin: 0; color: #333; font-size: 28px; font-weight: 800; letter-spacing: -1px; }
-        p { color: #666; font-size: 15px; margin-top: 8px; font-weight: 500; }
-        .logo { font-size: 50px; display: block; margin-bottom: 10px; animation: bounce 2s infinite; }
+    <script type="text/babel">
+        // 메인 컴포넌트 (App)
+        function App() {
+            // 알림창 띄우기 함수
+            const handleAlert = (msg) => {
+                alert(msg);
+            };
 
-        .test-list { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
-        .card { background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.06); transition: transform 0.2s; cursor: pointer; text-decoration: none; color: inherit; border: 2px solid transparent; }
-        .card:hover { transform: translateY(-5px); border-color: #FFD600; }
-        
-        .card-img { width: 100%; height: 130px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; font-size: 55px; }
-        .card-body { padding: 20px; }
-        .card-title { font-weight: 800; font-size: 17px; margin-bottom: 6px; display: block; color: #222; }
-        .card-desc { font-size: 13px; color: #888; display: block; line-height: 1.4; }
-        .badge { display: inline-block; padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+            return (
+                <div className="container">
+                    <header>
+                        <span className="logo">🦆</span>
+                        <h1>The Duck Lab</h1>
+                        <p>나쨩의 심리테스트 연구소</p>
+                    </header>
 
-        .office { background-color: #FFF9C4; }
-        .love { background-color: #FFEBEE; }
-        .friend { background-color: #E3F2FD; }
-        .money { background-color: #E8F5E9; }
+                    <div className="ad-banner">💰 상단 광고 영역 💰</div>
 
-        .ad-banner { width: 100%; height: 100px; background: #eee; margin: 20px 0; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 13px; font-weight: 600; border: 2px dashed #ddd; }
+                    <div className="test-list">
+                        {/* 1. 직장 테스트 (링크 이동) */}
+                        <a href="office.html" className="card">
+                            <div className="card-img bg-yellow">💼</div>
+                            <div className="card-body">
+                                <span className="badge" style={{backgroundColor: '#FFF59D', color: '#555'}}>BEST</span>
+                                <span className="title">직장인 생존 유형</span>
+                                <span className="desc">나는 팩폭러? 힐링러? 소름 돋는 직장 자아 찾기</span>
+                            </div>
+                        </a>
 
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @media (max-width: 400px) { .test-list { grid-template-columns: 1fr; } }
-    </style>
+                        {/* 2. 연애 테스트 (준비중) */}
+                        <div className="card" onClick={() => handleAlert('두근두근! 곧 오픈 예정입니다! 💖')}>
+                            <div className="card-img bg-pink">💘</div>
+                            <div className="card-body">
+                                <span className="badge" style={{backgroundColor: '#FFCDD2', color: '#555'}}>COMING SOON</span>
+                                <span className="title">연애 세포 레벨</span>
+                                <span className="desc">죽어가는 연애 세포 심폐소생술! 내 연애 스타일은?</span>
+                            </div>
+                        </div>
+
+                        {/* 3. 우정 테스트 (준비중) */}
+                        <div className="card" onClick={() => handleAlert('친구랑 싸우지 마세요! 곧 나옵니다! 👯‍♀️')}>
+                            <div className="card-img bg-blue">👯‍♀️</div>
+                            <div className="card-body">
+                                <span className="badge" style={{backgroundColor: '#BBDEFB', color: '#555'}}>COMING SOON</span>
+                                <span className="title">찐친 판독기</span>
+                                <span className="desc">우리는 평생 갈 친구일까? 소름 돋는 우정 궁합</span>
+                            </div>
+                        </div>
+
+                        {/* 4. 금전운 테스트 (준비중) */}
+                        <div className="card" onClick={() => handleAlert('부자 되세요! 곧 오픈합니다! 💸')}>
+                            <div className="card-img bg-green">💸</div>
+                            <div className="card-body">
+                                <span className="badge" style={{backgroundColor: '#C8E6C9', color: '#555'}}>COMING SOON</span>
+                                <span className="title">숨은 돈복 찾기</span>
+                                <span className="desc">나는 평생 얼마를 벌까? 재미로 보는 나의 재물운</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="ad-banner">💰 하단 광고 영역 💰</div>
+                    
+                    <footer style={{textAlign: 'center', marginTop: '40px', color: '#aaa', fontSize: '12px'}}>
+                        &copy; 2025 The Duck Lab. All rights reserved.
+                    </footer>
+                </div>
+            );
+        }
+
+        // 화면에 그리기
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
