@@ -1,79 +1,33 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Duck Lab: 오리 연구소</title>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Apple SD Gothic Neo', sans-serif; background-color: #f0f2f5; }
+        /* 폰트 불러오기 (프리텐다드 - 깔끔하고 세련됨) */
+        @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
+
+        body { margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; background-color: #f0f2f5; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        
         header { text-align: center; margin-bottom: 30px; padding: 20px 0; }
-        h1 { margin: 0; color: #333; font-size: 28px; font-weight: 800; }
-        p { color: #666; font-size: 14px; margin-top: 5px; }
+        h1 { margin: 0; color: #333; font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+        p { color: #666; font-size: 15px; margin-top: 8px; font-weight: 500; }
         .logo { font-size: 50px; display: block; margin-bottom: 10px; animation: bounce 2s infinite; }
+
         .test-list { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s; cursor: pointer; text-decoration: none; color: inherit; border: 2px solid transparent; }
+        
+        .card { background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.06); transition: transform 0.2s; cursor: pointer; text-decoration: none; color: inherit; border: 2px solid transparent; }
         .card:hover { transform: translateY(-5px); border-color: #FFD600; }
-        .card-img { width: 100%; height: 120px; background-color: #eee; display: flex; align-items: center; justify-content: center; font-size: 50px; }
-        .card-body { padding: 15px; }
-        .card-title { font-weight: bold; font-size: 16px; margin-bottom: 5px; display: block; }
-        .card-desc { font-size: 12px; color: #888; display: block; }
-        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; margin-bottom: 5px; }
+        
+        .card-img { width: 100%; height: 130px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; font-size: 55px; }
+        .card-body { padding: 20px; }
+        .card-title { font-weight: 800; font-size: 17px; margin-bottom: 6px; display: block; color: #222; }
+        .card-desc { font-size: 13px; color: #888; display: block; line-height: 1.4; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+
         .office { background-color: #FFF9C4; }
         .love { background-color: #FFEBEE; }
         .friend { background-color: #E3F2FD; }
         .money { background-color: #E8F5E9; }
-        .ad-banner { width: 100%; height: 100px; background: #ddd; margin: 20px 0; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 12px; }
+
+        .ad-banner { width: 100%; height: 100px; background: #eee; margin: 20px 0; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 13px; font-weight: 600; border: 2px dashed #ddd; }
+
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         @media (max-width: 400px) { .test-list { grid-template-columns: 1fr; } }
     </style>
-</head>
-<body>
-<div class="container">
-    <header>
-        <span class="logo">🦆</span>
-        <h1>The Duck Lab</h1>
-        <p>나쨩의 심리테스트 연구소에 오신 걸 환영합니다!</p>
-    </header>
-    <div class="ad-banner">💰 상단 광고 영역 💰</div>
-    <div class="test-list">
-        <a href="office.html" class="card">
-            <div class="card-img office">💼</div>
-            <div class="card-body">
-                <span class="badge" style="background:#FFF176; color:#555;">BEST</span>
-                <span class="card-title">직장인 생존 유형</span>
-                <span class="card-desc">나는 팩폭러일까? 힐링러일까? 소름 돋는 직장 자아 찾기</span>
-            </div>
-        </a>
-        <div class="card" onclick="alert('두근두근! 곧 오픈 예정입니다! 💖')">
-            <div class="card-img love">💘</div>
-            <div class="card-body">
-                <span class="badge" style="background:#FFCDD2; color:#555;">COMING SOON</span>
-                <span class="card-title">나의 연애 세포 레벨</span>
-                <span class="card-desc">죽어가는 연애 세포 심폐소생술! 내 연애 스타일은?</span>
-            </div>
-        </div>
-        <div class="card" onclick="alert('친구랑 싸우지 마세요! 곧 나옵니다! 👯‍♀️')">
-            <div class="card-img friend">👯‍♀️</div>
-            <div class="card-body">
-                <span class="badge" style="background:#BBDEFB; color:#555;">COMING SOON</span>
-                <span class="card-title">찐친 판독기</span>
-                <span class="card-desc">우리는 평생 갈 친구일까? 소름 돋는 우정 궁합</span>
-            </div>
-        </div>
-        <div class="card" onclick="alert('부자 되세요! 곧 오픈합니다! 💸')">
-            <div class="card-img money">💸</div>
-            <div class="card-body">
-                <span class="badge" style="background:#C8E6C9; color:#555;">COMING SOON</span>
-                <span class="card-title">숨은 돈복 찾기</span>
-                <span class="card-desc">나는 평생 얼마를 벌까? 재미로 보는 나의 재물운</span>
-            </div>
-        </div>
-    </div>
-    <div class="ad-banner">💰 하단 광고 영역 💰</div>
-    <footer style="text-align:center; margin-top:30px; color:#aaa; font-size:12px;">
-        &copy; 2025 The Duck Lab. All rights reserved.
-    </footer>
-</div>
-</body>
-</html>
