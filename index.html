@@ -6,7 +6,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-4M3T8RY7Z3');
     </script>
 
@@ -45,6 +44,7 @@
                     <div className="ad-banner">💰 상단 광고 영역 💰</div>
 
                     <div className="test-list">
+                        {/* 1. 직장 테스트 (연결됨) */}
                         <a href="office.html" className="card">
                             <div className="card-img bg-yellow">💼</div>
                             <div className="card-body">
@@ -54,17 +54,17 @@
                             </div>
                         </a>
 
-         <a href="love.html" className="card">
-    <div className="card-img bg-pink">💘</div>
-    <div className="card-body">
-        <span className="badge" style={{backgroundColor: '#FFCDD2', color: '#555'}}>HOT</span>
-        <span className="title">연애 세포 레벨</span>
-        <span className="desc">죽어가는 연애 세포 심폐소생술! 내 연애 스타일은?</span>
-    </div>
-</a>
+                        {/* 2. 연애 테스트 (✨ 여기 새로 연결됨!) */}
+                        <a href="love.html" className="card">
+                            <div className="card-img bg-pink">💘</div>
+                            <div className="card-body">
+                                <span className="badge" style={{backgroundColor: '#FFCDD2', color: '#555'}}>HOT</span>
+                                <span className="title">연애 세포 레벨</span>
+                                <span className="desc">죽어가는 연애 세포 심폐소생술! 내 연애 스타일은?</span>
+                            </div>
+                        </a>
 
-                        </div>
-
+                        {/* 3. 우정 테스트 (준비중) */}
                         <div className="card" onClick={() => handleAlert('친구랑 싸우지 마세요! 곧 나옵니다! 👯‍♀️')}>
                             <div className="card-img bg-blue">👯‍♀️</div>
                             <div className="card-body">
@@ -74,6 +74,7 @@
                             </div>
                         </div>
 
+                        {/* 4. 금전운 테스트 (준비중) */}
                         <div className="card" onClick={() => handleAlert('부자 되세요! 곧 오픈합니다! 💸')}>
                             <div className="card-img bg-green">💸</div>
                             <div className="card-body">
