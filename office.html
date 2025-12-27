@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>직장인 생존 유형 테스트</title>
+    
+    <meta name="description" content="회사에서 나는 어떤 오리일까? 3분 만에 알아보는 직장인 생존 유형 테스트!">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="직장인 멘탈 성향 테스트 - The Duck">
+    <meta property="og:description" content="상사한테 깨졌을 때 당신의 반응은? 100% 리얼 상황극 테스트">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/7074/7074987.png">
+    <meta property="og:url" content="https://나쨩아이디.github.io/the-duck/office.html">
+
     <link rel="stylesheet" href="style.css">
     
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -11,7 +19,6 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        /* style.css에 없는 테스트 전용 디자인들 */
         .app-container {
             background: white;
             padding: 30px 20px;
@@ -24,18 +31,16 @@
             flex-direction: column;
             justify-content: center;
             position: relative;
-            max-width: 420px; /* 테스트 화면은 좀 더 좁고 집중되게 */
+            max-width: 420px;
             margin: 0 auto;
         }
-        
-        /* 버튼 디자인 오버라이딩 */
         .btn {
             width: 100%;
             padding: 18px;
             margin: 8px 0;
             border: none;
             border-radius: 16px;
-            background-color: #FFD600; /* 메인 컬러 */
+            background-color: #FFD600;
             color: #333;
             font-size: 17px;
             font-weight: 700;
@@ -44,22 +49,16 @@
             box-shadow: 0 4px 0 #FBC02D;
         }
         .btn:active { transform: translateY(4px); box-shadow: none; }
-        
         .btn.outline {
             background: white;
             border: 2px solid #eee;
             box-shadow: 0 2px 0 #eee;
             color: #555;
         }
-        
-        /* 진행바 */
         .progress-bar { width: 100%; height: 8px; background: #f0f0f0; border-radius: 5px; margin-bottom: 30px; overflow: hidden; }
         .progress-fill { height: 100%; background: #FF6B6B; transition: width 0.3s; }
-        
-        /* 결과 박스 */
         .box { background: #F9F9F9; padding: 22px; border-radius: 18px; margin: 15px 0; text-align: left; }
         .tag { display: inline-block; padding: 6px 14px; background: #2c3e50; color: white; border-radius: 20px; font-size: 13px; margin-bottom: 12px; font-weight: 700; }
-        
         .duck-img { font-size: 80px; margin: 20px 0; animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .fade-in { animation: fadeIn 0.5s; }
@@ -72,7 +71,6 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // [DATA] 질문 24개 (정밀 진단 버전)
         const QUESTIONS = [
             { id: 1, type: "EI", q: "출근길, 회사 로비에서 안 친한 동료를 발견했다!", a: "자연스럽게 다가가서 '좋은 아침입니다!' 인사한다.", b: "핸드폰 보는 척하며 다음 엘리베이터를 기다린다." },
             { id: 2, type: "JP", q: "내일 오전 회의 자료를 준비해야 한다.", a: "목차부터 결론까지 완벽하게 세팅해놓고 퇴근한다.", b: "일단 큰 틀만 잡고, 내일 아침의 나에게 맡긴다." },
@@ -100,7 +98,6 @@
             { id: 24, type: "JP", q: "약속 시간에 늦을 것 같다.", a: "이미 30분 전부터 초조해서 뛰어가고 있다.", b: "아 조금 늦겠네~ 뭐 어때 천천히 가자." }
         ];
 
-        // [DATA] 결과 8개 (팩폭 + 힐링)
         const RESULTS = {
             "ETJ": { name: "폭주하는 불도저 오리 🔥", desc: "답답한 건 질색! 일잘러지만 성격 급한 리더형", heal: "다들 당신만큼 빠르진 않아요. 커피 한 잔의 여유를!", item: "따뜻한 캐모마일 티 🍵" },
             "ETP": { name: "협상의 신, 사기꾼 오리 🦊", desc: "잔머리 대마왕! 벼락치기로 성과 내는 효율맨", heal: "잔머리도 머리라 피곤해요. 뇌를 식혀주세요.", item: "쿨링 마사지 팩 ❄️" },
@@ -116,7 +113,6 @@
             const [step, setStep] = useState(0);
             const [scores, setScores] = useState({ E:0, I:0, T:0, F:0, J:0, P:0 });
 
-            // 답변 클릭 핸들러
             const handleAnswer = (type, idx) => {
                 const target = idx === 0 ? type[0] : type[1]; 
                 setScores(prev => ({ ...prev, [target]: prev[target] + 1 }));
@@ -124,16 +120,13 @@
                 if (step < QUESTIONS.length) {
                     setStep(prev => prev + 1);
                 } else {
-                    // 로딩 화면으로 이동
                     setStep(QUESTIONS.length + 1); 
-                    // 3초 뒤 결과 화면으로 이동
                     setTimeout(() => {
                         setStep(QUESTIONS.length + 2); 
                     }, 3000); 
                 }
             };
 
-            // 결과 계산 로직
             const getResult = () => {
                 const r1 = scores.E > scores.I ? "E" : "I";
                 const r2 = scores.T > scores.F ? "T" : "F";
