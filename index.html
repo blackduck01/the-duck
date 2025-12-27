@@ -66,7 +66,7 @@
                             </div>
                         </a>
 
-                        {/* 3. 돈복 테스트 (✨ 새로 연결됨!) */}
+                        {/* 3. 돈복 테스트 (NEW!) */}
                         <a href="money.html" className="card">
                             <div className="card-img bg-green">💸</div>
                             <div className="card-body">
@@ -76,7 +76,7 @@
                             </div>
                         </a>
 
-                        {/* 4. 우정 테스트 (아직 준비중) */}
+                        {/* 4. 우정 테스트 (준비중) */}
                         <div className="card" onClick={() => handleAlert('친구랑 싸우지 마세요! 곧 나옵니다! 👯‍♀️')}>
                             <div className="card-img bg-blue">👯‍♀️</div>
                             <div className="card-body">
@@ -89,8 +89,12 @@
 
                     <div className="ad-banner">💰 하단 광고 영역 💰</div>
                     
-                    <footer style={{textAlign: 'center', marginTop: '40px', color: '#aaa', fontSize: '12px'}}>
-                        &copy; 2025 The Duck Lab. All rights reserved.
+                    <footer style={{textAlign: 'center', marginTop: '40px', paddingBottom: '20px', color: '#aaa', fontSize: '12px'}}>
+                        <p>&copy; 2025 The Duck Lab. All rights reserved.</p>
+                        <p style={{marginTop: '10px'}}>
+                            <a href="privacy.html" style={{color: '#aaa', textDecoration: 'none', marginRight: '10px'}}>개인정보처리방침</a> | 
+                            <a href="https://github.com/blackduck01" target="_blank" style={{color: '#aaa', textDecoration: 'none', marginLeft: '10px'}}>Contact</a>
+                        </p>
                     </footer>
                 </div>
             );
