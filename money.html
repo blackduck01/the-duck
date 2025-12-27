@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4M3T8RY7Z3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4M3T8RY7Z3');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숨은 돈복 찾기 테스트</title>
+    
+    <meta name="description" content="나는 평생 얼마를 벌까? 재미로 보는 나의 재물운과 소비 습관!">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="숨은 돈복 찾기 - The Duck">
+    <meta property="og:description" content="당신은 걸어 다니는 기업? 아니면 구멍 난 지갑? 소름 돋는 결과 확인!">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/2454/2454282.png"> <meta property="og:url" content="https://blackduck01.github.io/the-duck/money.html">
+
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .app-container {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 2px solid #C8E6C9; /* 연한 초록 테두리 */
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .btn {
+            width: 100%;
+            padding: 18px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 16px;
+            background-color: #E8F5E9; /* 아주 연한 초록 */
+            color: #2E7D32; /* 진한 초록 글씨 */
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 #C8E6C9;
+        }
+        .btn:active { transform: translateY(4px); box-shadow: none; }
+        .btn:hover { background-color: #C8E6C9; }
+        
+        .progress-bar { width: 100%; height: 8px; background: #f0f0f0; border-radius: 5px; margin-bottom: 30px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #00E676; transition: width 0.3s; } /* 형광 초록 게이지 */
+
+        .duck-img { font-size: 80px; margin: 20px 0; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        
+        .box { background: #F1F8E9; padding: 22px; border-radius: 18px; margin: 15px 0; text-align: left; }
+        .tag { display: inline-block; padding: 6px 14px; background: #388E3C; color: white; border-radius: 20px; font-size: 13px; margin-bottom: 12px; font-weight: 700; }
+        .fade-in { animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const QUESTIONS = [
+            { q: "길을 가다가 10만원을 주웠다! 나는?", a: "와 꽁돈이다! 바로 사고 싶었던 옷 사러 감.", b: "이게 웬 떡? 일단 통장에 넣어두고 비상금으로 씀." },
+            { q: "친구들이랑 밥을 먹고 계산할 때 나는?", a: "야 내가 낼게! (쿨하게 긁고 나중에 1/N 받거나 까먹음)", b: "정확하게 나눠서 계산하거나 더치페이 앱을 켠다." },
+            { q: "세일 기간이라는 문자를 받았다.", a: "어머 이건 사야 해! 당장 링크 클릭.", b: "딱히 필요한 건 없는데... 하고 무시함." },
+            { q: "적금 만기일이 되어 큰돈이 들어왔다.", a: "고생한 나를 위한 선물! 여행이나 명품 플렉스!", b: "바로 예금으로 묶거나 주식/코인에 투자함." },
+            { q: "편의점에서 1+1 행사를 한다면?", a: "하나 사면 하나 더? 무조건 쟁여놔야지.", b: "지금 당장 필요 없으면 안 삼. 짐만 됨." },
+            { q: "나의 한 달 카드 값 명세서를 볼 때 느낌은?", a: "헐... 내가 언제 이렇게 썼지? (기억 안 남)", b: "음, 예상했던 대로 나왔군. (지출 내역 파악 중)" },
+            { q: "복권을 사는 나의 마음가짐은?", a: "당첨되면 뭐 하지? 퇴사하고 슈퍼카 사고... (김칫국)", b: "되면 좋고 안 되면 기부한 셈 치지 뭐." },
+            { q: "기분 전환이 필요할 때 나는?", a: "맛있는 거 먹거나 쇼핑으로 스트레스 풂.", b: "잠을 자거나 산책을 함 (돈 안 드는 방법)." },
+            { q: "주식이나 코인 투자를 해본 적 있는가?", a: "남들이 돈 벌었다길래 따라 들어가서 물려봄.", b: "철저히 분석해서 하거나, 아예 안전자산만 함." }
+        ];
+
+        const RESULTS = [
+            { min: 0, max: 3, name: "구멍 난 지갑 오리 💸", desc: "돈이 들어오기가 무섭게 나가는 타입! '인생은 한 번뿐'이라며 즐기는 욜로족이네요. 지금은 즐겁지만 통장 잔고는 울고 있어요. 가계부 쓰기가 시급합니다!", item: "강제 저축 적금 통장 🏦" },
+            { min: 4, max: 6, name: "현실적인 살림꾼 오리 🏠", desc: "쓸 땐 쓰고 아낄 땐 아끼는 합리적인 소비 요정! 돈에 대한 감각이 균형 잡혀 있어서 굶어 죽을 일은 없어요. 조금 더 투자 공부를 하면 부자 가능성 UP!", item: "경제 뉴스 구독 📰" },
+            { min: 7, max: 9, name: "걸어 다니는 기업 오리 👑", desc: "돈 냄새를 기가 막히게 맡는 예비 재벌! 허투루 돈을 쓰지 않고 불리는 법을 본능적으로 알고 있어요. 워렌 버핏 오리가 될 자질이 충분합니다!", item: "황금 돼지 저금통 🐷" }
+        ];
+
+        function App() {
+            const [step, setStep] = useState(0);
+            const [score, setScore] = useState(0);
+
+            const handleAnswer = (idx) => {
+                // B(절약/투자형)를 선택하면 점수 +1
+                if (idx === 1) setScore(prev => prev + 1);
+
+                if (step < QUESTIONS.length) {
+                    setStep(prev => prev + 1);
+                } else {
+                    setStep(QUESTIONS.length + 1); 
+                    setTimeout(() => setStep(QUESTIONS.length + 2), 3000); 
+                }
+            };
+
+            const getResult = () => {
+                return RESULTS.find(r => score >= r.min && score <= r.max);
+            };
+
+            return (
+                <div className="app-container fade-in">
+                    <div className="ad-banner">💰 상단 광고 영역 💰</div>
+
+                    {step === 0 && (
+                        <div>
+                            <div className="tag">Money Test</div>
+                            <h1>숨은 돈복 찾기<br/>부자력 테스트</h1>
+                            <div className="duck-img">💰</div>
+                            <p>나는 평생 얼마를 벌까?<br/>재미로 보는 나의 재물운!</p>
+                            <button className="btn" onClick={() => setStep(1)}>진단 시작하기</button>
+                            <button className="btn" style={{background:'white', border:'1px solid #C8E6C9'}} onClick={() => location.href='index.html'}>메인으로 가기</button>
+                        </div>
+                    )}
+                    
+                    {step >= 1 && step <= QUESTIONS.length && (
+                        <div>
+                            <div className="progress-bar"><div className="progress-fill" style={{width: `${(step/QUESTIONS.length)*100}%`}}></div></div>
+                            <div className="tag">Q{step}</div>
+                            <h2>{QUESTIONS[step-1].q}</h2>
+                            <button className="btn" style={{background:'white', border:'1px solid #eee', color:'#555'}} onClick={() => handleAnswer(0)}>{QUESTIONS[step-1].a}</button>
+                            <button className="btn" style={{background:'white', border:'1px solid #eee', color:'#555'}} onClick={() => handleAnswer(1)}>{QUESTIONS[step-1].b}</button>
+                        </div>
+                    )}
+
+                    {step === QUESTIONS.length + 1 && (
+                        <div className="fade-in">
+                            <div className="duck-img">🎰</div>
+                            <h2>돈복 계산기 돌리는 중...</h2>
+                            <p>과연 당신의 몸값은?</p>
+                            <div className="ad-banner" style={{height:'200px'}}>💰 전면 광고 영역 💰</div>
+                        </div>
+                    )}
+
+                    {step === QUESTIONS.length + 2 && (
+                        <div>
+                            <div className="tag">당신의 돈복은</div>
+                            <div className="duck-img">💎</div>
+                            <h1>{getResult().name}</h1>
+                            <div className="box">
+                                <p>{getResult().desc}</p>
+                                <hr style={{opacity:0.2}}/>
+                                <small>추천 아이템: <b>{getResult().item}</b></small>
+                            </div>
+                            <button className="btn" onClick={() => window.location.reload()}>다시 하기</button>
+                            <button className="btn" style={{background:'white', border:'1px solid #C8E6C9'}} onClick={() => location.href='index.html'}>다른 테스트 하러 가기</button>
+                            <div className="ad-banner">💰 하단 광고 영역 💰</div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
