@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4M3T8RY7Z3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4M3T8RY7Z3');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연애 세포 생존 테스트</title>
+    
+    <meta name="description" content="내 심장은 아직 뛰고 있을까? 죽어가는 연애 세포 심폐소생술 테스트!">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="연애 세포 생존 테스트 - The Duck">
+    <meta property="og:description" content="당신의 연애 세포는 안녕하십니까? 소름 돋는 진단 결과 확인하기">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/2585/2585175.png"> <meta property="og:url" content="https://blackduck01.github.io/the-duck/love.html">
+
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .app-container {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 2px solid #FFCDD2; /* 핑크색 테두리 */
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .btn {
+            width: 100%;
+            padding: 18px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 16px;
+            background-color: #FFEBEE; /* 연한 핑크 배경 */
+            color: #D32F2F; /* 진한 핑크 글씨 */
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 #FFCDD2;
+        }
+        .btn:active { transform: translateY(4px); box-shadow: none; }
+        .btn:hover { background-color: #FFCDD2; }
+        
+        .progress-bar { width: 100%; height: 8px; background: #f0f0f0; border-radius: 5px; margin-bottom: 30px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #FF4081; transition: width 0.3s; } /* 핫핑크 게이지 */
+
+        .duck-img { font-size: 80px; margin: 20px 0; animation: heartBeat 1.5s infinite; }
+        @keyframes heartBeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        
+        .box { background: #FFF0F5; padding: 22px; border-radius: 18px; margin: 15px 0; text-align: left; }
+        .tag { display: inline-block; padding: 6px 14px; background: #E91E63; color: white; border-radius: 20px; font-size: 13px; margin-bottom: 12px; font-weight: 700; }
+        .fade-in { animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const QUESTIONS = [
+            { q: "주말에 약속이 하나도 없다. 나의 기분은?", a: "아싸! 집에서 넷플릭스 보면서 힐링해야지.", b: "좀 심심한데... 누구라도 불러낼까?" },
+            { q: "소개팅 제안이 들어왔다!", a: "귀찮아... 사진 보고 내 스타일 아니면 거절.", b: "오! 새로운 만남은 언제나 환영이지! 콜!" },
+            { q: "길 가다 이상형을 마주쳤을 때 나는?", a: "헐 대박... (힐끔 보고 그냥 지나감)", b: "저기요! (번호 물어볼 용기는 없어도 계속 쳐다봄)" },
+            { q: "썸 타는 상대가 답장이 늦다.", a: "바쁜가 보지 뭐. 나도 내 할 일 함.", b: "뭐지? 왜 안 읽지? 내가 뭐 잘못 보냈나? (초조)" },
+            { q: "친구가 연인과 싸웠다고 상담을 요청한다.", a: "헤어져. 그 정도면 안 맞는 거야. (현실 조언)", b: "헐 ㅠㅠ 진짜 속상하겠다... (같이 욕해줌)" },
+            { q: "드라마 속 키스신을 볼 때 나의 반응은?", a: "오... 연출 잘했네. (무덤덤)", b: "꺄악!! 미쳤다!! (내 심장이 나대기 시작함)" },
+            { q: "마지막 연애가 언제인지 기억나는가?", a: "음... 가물가물하다. (오래됨)", b: "당연하지! 얼마 안 됐거나 항상 연애 중임." },
+            { q: "크리스마스나 발렌타인데이가 다가오면?", a: "그냥 빨간 날일 뿐. 케이크나 먹자.", b: "외롭다... 나만 커플 아니야 ㅠㅠ" },
+            { q: "연애를 안 하는 가장 큰 이유는?", a: "혼자가 너무 편해서 / 돈 아까워서.", b: "마땅한 사람이 없어서 / 기회가 없어서." },
+            { q: "내 인생에서 사랑의 비중은?", a: "있으면 좋고 없으면 말고. 30% 미만.", b: "사랑 없는 삶은 앙꼬 없는 찐빵! 80% 이상." }
+        ];
+
+        const RESULTS = [
+            { min: 0, max: 3, name: "연애 세포 동면 중 ❄️", desc: "혼자가 너무 편한 '프로 집순이/집돌이' 오리! 지금 이대로가 행복해서 연애의 필요성을 못 느끼고 있어요. 귀찮음이 설렘을 이겨버린 상태!", item: "로맨스 영화 정주행 🎬" },
+            { min: 4, max: 7, name: "썸만 타는 간잽이 오리 🦊", desc: "연애는 하고 싶은데 막상 시작하려면 이것저것 따지는 게 많아요. 설렘은 즐기지만 깊은 관계는 두려워하는 타입!", item: "소개팅 어플 설치 📱" },
+            { min: 8, max: 10, name: "사랑꾼 리트리버 오리 🐶", desc: "사람 좋아! 사랑 좋아! 꼬리 흔들 준비 완료! 금사빠 기질이 있고 외로움을 많이 타요. 지금 당장 사랑이 필요한 상태!", item: "당장 밖으로 나가기 🏃" }
+        ];
+
+        function App() {
+            const [step, setStep] = useState(0);
+            const [score, setScore] = useState(0);
+
+            const handleAnswer = (idx) => {
+                // B(적극적/감성적)를 선택하면 점수 +1
+                if (idx === 1) setScore(prev => prev + 1);
+
+                if (step < QUESTIONS.length) {
+                    setStep(prev => prev + 1);
+                } else {
+                    setStep(QUESTIONS.length + 1); 
+                    setTimeout(() => setStep(QUESTIONS.length + 2), 3000); 
+                }
+            };
+
+            const getResult = () => {
+                return RESULTS.find(r => score >= r.min && score <= r.max);
+            };
+
+            return (
+                <div className="app-container fade-in">
+                    <div className="ad-banner">💰 상단 광고 영역 💰</div>
+
+                    {step === 0 && (
+                        <div>
+                            <div className="tag">Love Test</div>
+                            <h1>나의 연애 세포<br/>생존 신고서</h1>
+                            <div className="duck-img">💘</div>
+                            <p>내 심장은 아직 뛰고 있을까?<br/>죽어가는 연애 세포 심폐소생술!</p>
+                            <button className="btn" onClick={() => setStep(1)}>진단 시작하기</button>
+                            <button className="btn" style={{background:'white', border:'1px solid #FFCDD2'}} onClick={() => location.href='index.html'}>메인으로 가기</button>
+                        </div>
+                    )}
+                    
+                    {step >= 1 && step <= QUESTIONS.length && (
+                        <div>
+                            <div className="progress-bar"><div className="progress-fill" style={{width: `${(step/QUESTIONS.length)*100}%`}}></div></div>
+                            <div className="tag">Q{step}</div>
+                            <h2>{QUESTIONS[step-1].q}</h2>
+                            <button className="btn" style={{background:'white', border:'1px solid #eee', color:'#555'}} onClick={() => handleAnswer(0)}>{QUESTIONS[step-1].a}</button>
+                            <button className="btn" style={{background:'white', border:'1px solid #eee', color:'#555'}} onClick={() => handleAnswer(1)}>{QUESTIONS[step-1].b}</button>
+                        </div>
+                    )}
+
+                    {step === QUESTIONS.length + 1 && (
+                        <div className="fade-in">
+                            <div className="duck-img">💓</div>
+                            <h2>연애 세포 측정 중...</h2>
+                            <p>두근두근 결과는?</p>
+                            <div className="ad-banner" style={{height:'200px'}}>💰 전면 광고 영역 💰</div>
+                        </div>
+                    )}
+
+                    {step === QUESTIONS.length + 2 && (
+                        <div>
+                            <div className="tag">당신의 상태는</div>
+                            <div className="duck-img">🎁</div>
+                            <h1>{getResult().name}</h1>
+                            <div className="box">
+                                <p>{getResult().desc}</p>
+                                <hr style={{opacity:0.2}}/>
+                                <small>추천 처방: <b>{getResult().item}</b></small>
+                            </div>
+                            <button className="btn" onClick={() => window.location.reload()}>다시 하기</button>
+                            <button className="btn" style={{background:'white', border:'1px solid #FFCDD2'}} onClick={() => location.href='index.html'}>다른 테스트 하러 가기</button>
+                            <div className="ad-banner">💰 하단 광고 영역 💰</div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
