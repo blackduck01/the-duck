@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4M3T8RY7Z3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4M3T8RY7Z3');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Duck Lab: 오리 연구소</title>
@@ -9,15 +18,15 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="The Duck Lab: 오리 연구소">
     <meta property="og:description" content="나 팩폭러일까? 힐링러일까? 소름 돋는 자아 찾기 무료 테스트!">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/7074/7074987.png">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/2663/2663067.png">
     <meta property="og:url" content="https://blackduck01.github.io/the-duck/">
 
     <link rel="stylesheet" href="style.css">
+    
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-
 <body>
     <div id="root"></div>
 
@@ -36,7 +45,6 @@
                     <div className="ad-banner">💰 상단 광고 영역 💰</div>
 
                     <div className="test-list">
-                        {/* 1. 직장 테스트 */}
                         <a href="office.html" className="card">
                             <div className="card-img bg-yellow">💼</div>
                             <div className="card-body">
@@ -46,7 +54,6 @@
                             </div>
                         </a>
 
-                        {/* 2. 연애 테스트 */}
                         <div className="card" onClick={() => handleAlert('두근두근! 곧 오픈 예정입니다! 💖')}>
                             <div className="card-img bg-pink">💘</div>
                             <div className="card-body">
@@ -56,7 +63,6 @@
                             </div>
                         </div>
 
-                        {/* 3. 우정 테스트 */}
                         <div className="card" onClick={() => handleAlert('친구랑 싸우지 마세요! 곧 나옵니다! 👯‍♀️')}>
                             <div className="card-img bg-blue">👯‍♀️</div>
                             <div className="card-body">
@@ -66,7 +72,6 @@
                             </div>
                         </div>
 
-                        {/* 4. 금전운 테스트 */}
                         <div className="card" onClick={() => handleAlert('부자 되세요! 곧 오픈합니다! 💸')}>
                             <div className="card-img bg-green">💸</div>
                             <div className="card-body">
