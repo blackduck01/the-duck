@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>찐친 판독기 결과 | The Duck Lab</title>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9076819245720802" crossorigin="anonymous"></script>
+    <style>
+        body { font-family: 'Pretendard', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; color: #333; }
+        .container { width: 100%; max-width: 600px; background: white; min-height: 100vh; padding: 30px 20px; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .result-subtitle { color: #2E7D32; font-size: 1rem; margin-bottom: 10px; font-weight: bold; }
+        .result-title { font-size: 1.8rem; font-weight: 900; margin: 0 0 30px 0; color: #222; word-break: keep-all; }
+        .result-box { width: 100%; max-width: 350px; padding: 40px 20px; background-color: #E8F5E9; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .result-icon { font-size: 5rem; margin-bottom: 20px; display: block; }
+        .result-desc { background: #f1f8e9; padding: 20px; border-radius: 12px; text-align: left; line-height: 1.6; font-size: 0.95rem; margin-bottom: 30px; width: 100%; box-sizing: border-box; color: #444; border: 1px solid #c8e6c9; }
+        .desc-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; display: block; color: #388E3C; }
+        .btn-group { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .btn { padding: 18px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; border: none; width: 100%; transition: transform 0.1s; }
+        .btn:active { transform: scale(0.98); }
+        .kakao-btn { background-color: #FEE500; color: #3c1e1e; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .retry-btn { background-color: #333; color: white; }
+        .home-btn { background-color: white; border: 2px solid #eee; color: #666; }
+        .ad-area { width: 100%; background: #fafafa; border: 1px dashed #ddd; padding: 20px; border-radius: 12px; box-sizing: border-box; margin-bottom: 20px; color: #ccc; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="result-subtitle">내 친구 유형은?</p>
+        <h1 class="result-title" id="resultTitle">결과 분석 중...</h1>
+        <div class="result-box" id="resultBox"><span class="result-icon" id="resultIcon">👯‍♀️</span></div>
+        <div class="result-desc">
+            <span class="desc-title">🌱 우정 스타일</span>
+            <p id="resultDesc">잠시만 기다려주세요...</p>
+        </div>
+        <div class="btn-group">
+            <button class="btn kakao-btn" onclick="shareResult()">카카오톡 공유하기</button>
+            <button class="btn retry-btn" onclick="location.href='friendintro.html'">테스트 다시하기</button>
+            <button class="btn home-btn" onclick="location.href='index.html'">다른 테스트 보러가기</button>
+        </div>
+        <div class="ad-area">💸 광고 영역 💸</div>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const mbti = urlParams.get('mbti');
+        const resultData = {
+            "ISTJ": { title: "약속은 칼같이\n'인간 알람시계'", icon: "⌚", desc: "약속 시간 1분도 안 늦음. 즉흥적인 만남 싫어함. 한 번 믿은 친구는 끝까지 감." },
+            "ISFJ": { title: "엄마 같은 친구\n'챙김이'", icon: "🍱", desc: "술자리에서 물 챙겨주는 애. 고민 상담 잘 들어줌. 거절 못 해서 손해 볼 때가 있음." },
+            "INFJ": { title: "속이 깊은\n'상담가'", icon: "🧘", desc: "친구 많지 않음 (좁고 깊게). 내 속마음은 잘 안 보여줌. 친구가 우울해하면 같이 우울해짐." },
+            "INTJ": { title: "팩폭 조언러\n'솔로몬'", icon: "⚖️", desc: "징징거리는 거 싫어함. 고민 말하면 해결책 딱 내놓음. 영양가 없는 대화 힘들어함." },
+            "ISTP": { title: "연락 두절\n'동굴 탐험가'", icon: "⛰️", desc: "필요할 때만 연락함. 카톡 읽씹 잘함. 근데 만나면 아무 일 없었다는 듯이 잘 놈." },
+            "ISFP": { title: "착한데 답답한\n'순두부'", icon: "🍮", desc: "모든 의견에 '좋아~'라고 함. 결정 장애 있음. 싸우는 거 싫어서 맨날 져줌." },
+            "INFP": { title: "유리 멘탈\n'감성 친구'", icon: "🌧️", desc: "단톡방 말투 하나에 상처받음. 텐션 좋았다가 갑자기 우울해짐. 위로가 많이 필요함." },
+            "INTP": { title: "너 T야?\n'로봇 친구'", icon: "🤖", desc: "영혼 없는 리액션 장인. 관심 있는 주제 나오면 말 많아짐. 감정적인 공감 능력 부족." },
+            "ESTP": { title: "오늘만 산다\n'파티원 모집'", icon: "🎉", desc: "술자리 개근상. 노는 게 제일 좋음. 번개 모임 주동자. 고민 없음." },
+            "ESFP": { title: "세상 시끄러운\n'확성기'", icon: "📢", desc: "어딜 가나 주목받아야 함. 친구의 친구까지 다 내 친구. 비밀 얘기하면 온 동네 소문남." },
+            "ENFP": { title: "텐션 폭발\n'비글미'", icon: "🐶", desc: "가만히 있지를 못함. 리액션 혜자. 친구를 너무 좋아해서 집착할 수도 있음." },
+            "ENTP": { title: "장난기 만렙\n'악동'", icon: "🤡", desc: "친구 놀리는 맛에 삼. 토론(말싸움) 즐김. 쿨해서 뒤끝은 없음." },
+            "ESTJ": { title: "총무 담당\n'리더'", icon: "💳", desc: "모임 회비, 장소, 시간 다 정해줌. 답답한 꼴 못 봄. 친구들 훈수 두는 거 좋아함." },
+            "ESFJ": { title: "오지랖 태평양\n'학부모 회장'", icon: "🤗", desc: "친구 일이면 발 벗고 나섬. 소외되는 친구 챙김. 칭찬 안 해주면 삐짐." },
+            "ENFJ": { title: "평화주의자\n'성인군자'", icon: "🕊️", desc: "싸움 나면 중재함. 친구의 성장을 진심으로 응원함. 배신 당하면 상처 크게 받음." },
+            "ENTJ": { title: "성공하자 친구야\n'야망캐'", icon: "🚀", desc: "생산적인 대화 좋아함. 멍청한 행동 하면 팩폭 날림. 의리 하나는 확실함." }
+        };
+        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d'); 
+        function updateResult() {
+            let type = mbti ? mbti.toUpperCase() : "ESFP"; 
+            if(!resultData[type]) type = "ESFP";
+            const data = resultData[type];
+            document.getElementById('resultTitle').innerText = data.title;
+            document.getElementById('resultIcon').innerText = data.icon;
+            document.getElementById('resultDesc').innerText = data.desc;
+        }
+        function shareResult() {
+            let type = mbti ? mbti.toUpperCase() : "ESFP";
+            const data = resultData[type];
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '나의 찐친 유형은?',
+                    description: data.title.replace('\n', ' ') + ' - ' + data.desc,
+                    imageUrl: 'https://theduck-lab.com/logo.png', 
+                    link: { mobileWebUrl: window.location.href, webUrl: window.location.href },
+                },
+                buttons: [{ title: '결과 보기', link: { mobileWebUrl: window.location.href, webUrl: window.location.href } }]
+            });
+        }
+        updateResult();
+    </script>
+</body>
+</html>
