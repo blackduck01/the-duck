@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연애 세포 레벨 테스트 결과 | The Duck Lab</title>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9076819245720802" crossorigin="anonymous"></script>
+    <style>
+        body { font-family: 'Pretendard', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; color: #333; }
+        .container { width: 100%; max-width: 600px; background: white; min-height: 100vh; padding: 30px 20px; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .result-subtitle { color: #E91E63; font-size: 1rem; margin-bottom: 10px; font-weight: bold; }
+        .result-title { font-size: 1.8rem; font-weight: 900; margin: 0 0 30px 0; color: #222; word-break: keep-all; }
+        .result-box { width: 100%; max-width: 350px; padding: 40px 20px; background-color: #FCE4EC; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .result-icon { font-size: 5rem; margin-bottom: 20px; display: block; }
+        .result-desc { background: #fff0f5; padding: 20px; border-radius: 12px; text-align: left; line-height: 1.6; font-size: 0.95rem; margin-bottom: 30px; width: 100%; box-sizing: border-box; color: #444; border: 1px solid #ffcdd2; }
+        .desc-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; display: block; color: #D81B60; }
+        .btn-group { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .btn { padding: 18px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; border: none; width: 100%; transition: transform 0.1s; }
+        .btn:active { transform: scale(0.98); }
+        .kakao-btn { background-color: #FEE500; color: #3c1e1e; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .retry-btn { background-color: #333; color: white; }
+        .home-btn { background-color: white; border: 2px solid #eee; color: #666; }
+        .ad-area { width: 100%; background: #fafafa; border: 1px dashed #ddd; padding: 20px; border-radius: 12px; box-sizing: border-box; margin-bottom: 20px; color: #ccc; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="result-subtitle">나의 연애 세포 레벨은?</p>
+        <h1 class="result-title" id="resultTitle">결과 분석 중...</h1>
+        <div class="result-box" id="resultBox"><span class="result-icon" id="resultIcon">💘</span></div>
+        <div class="result-desc">
+            <span class="desc-title">💌 연애 스타일</span>
+            <p id="resultDesc">잠시만 기다려주세요...</p>
+        </div>
+        <div class="btn-group">
+            <button class="btn kakao-btn" onclick="shareResult()">카카오톡 공유하기</button>
+            <button class="btn retry-btn" onclick="location.href='loveintro.html'">테스트 다시하기</button>
+            <button class="btn home-btn" onclick="location.href='index.html'">다른 테스트 보러가기</button>
+        </div>
+        <div class="ad-area">💸 광고 영역 💸</div>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const mbti = urlParams.get('mbti');
+        const resultData = {
+            "ISTJ": { title: "철벽 수비 대장\n'유교걸/유교보이'", icon: "🛡️", desc: "책임감 강하고 신뢰 1등. 근데 썸 탈 때 눈치가 좀 없음. 한 번 사귀면 결혼까지 생각하는 진국 스타일." },
+            "ISFJ": { title: "헌신적인 사랑꾼\n'내조의 여왕/왕'", icon: "🎁", desc: "기념일, 사소한 취향 다 기억함. 퍼주다가 상처받기 쉬움. '아무거나 좋아'라고 하지만 사실 원하는 거 있음." },
+            "INFJ": { title: "운명을 믿는\n'로맨틱 예언가'", icon: "🔮", desc: "가벼운 만남 싫어함. 영혼의 단짝을 기다림. 겉은 차가워 보여도 속은 용광로처럼 뜨거움." },
+            "INTJ": { title: "연애도 분석하는\n'알파고 로맨스'", icon: "🤖", desc: "썸 탈 때도 엑셀 돌려서 확률 계산함. 배울 점 있는 사람 좋아함. 밀당 같은 거 딱 질색." },
+            "ISTP": { title: "귀찮은 건 질색\n'마이웨이 연애'", icon: "😼", desc: "구속하는 거 제일 싫어함. 혼자만의 시간 필수. 표현은 서툴러도 행동으로 보여주는 츤데레." },
+            "ISFP": { title: "침대 밖은 위험해\n'집콕 연애러'", icon: "🛌", desc: "연락 귀찮아함. 근데 만나면 세상 다정함. 갈등 생기면 동굴로 숨어버림. 착하고 순둥순둥함." },
+            "INFP": { title: "망상 속 주인공\n'비련의 여주/남주'", icon: "😿", desc: "로맨스 영화 한 편 찍고 있음. 사소한 말에 의미 부여하고 밤샘. 낭만적인 사랑을 꿈꿈." },
+            "INTP": { title: "연애 세포 동면 중\n'무성욕자?'", icon: "💤", desc: "연애 꼭 해야 해? 혼자가 편함. 지적인 대화 통하는 사람 아니면 관심 없음. 팩폭 날려서 애인 울림." },
+            "ESTP": { title: "직진 본능\n'불도저'", icon: "🏎️", desc: "맘에 들면 바로 들이댐. 스킨십 진도 빠름. 지루한 거 못 참아서 이벤트 좋아함." },
+            "ESFP": { title: "끼쟁이 플러팅 장인\n'금사빠'", icon: "😘", desc: "오는 사람 안 막고 가는 사람 안 잡음. 분위기에 취해 사랑에 잘 빠짐. 애정 표현 200%." },
+            "ENFP": { title: "인간 리트리버\n'댕댕이 스타일'", icon: "🐶", desc: "애교 많고 치대는 거 좋아함. 삐져도 5분 뒤에 까먹음. 콩깍지 씌이면 간 쓸개 다 빼줌." },
+            "ENTP": { title: "썸도 게임처럼\n'나쁜 남자/여자'", icon: "😈", desc: "티키타카 안 되면 못 사귐. 논쟁하고 장난치는 거 좋아함. 쿨병 걸려서 집착 안 함." },
+            "ESTJ": { title: "연애도 리드한다\n'대장님'", icon: "👑", desc: "데이트 코스 완벽 계획. 답답한 거 못 참음. 애인 인생까지 관리하려고 함 (잔소리 대마왕)." },
+            "ESFJ": { title: "사랑둥이\n'핵인싸 애인'", icon: "🥰", desc: "친구들한테 애인 자랑하는 거 좋아함. 리액션 부자. 내 사람 건드리면 참지 않음." },
+            "ENFJ": { title: "다정함 치사량\n'대형견'", icon: "🐕", desc: "상대방 멘탈 케어 전문. 사랑받고 싶어서 안달 남. 헤어지면 후유증 제일 큼." },
+            "ENTJ": { title: "야망 있는 커플\n'쇼윈도 부부?'", icon: "💎", desc: "능력 있는 사람 좋아함. 같이 성장하는 연애 추구. 일하느라 연락 잘 안 될 수도 있음." }
+        };
+        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d'); 
+        function updateResult() {
+            let type = mbti ? mbti.toUpperCase() : "ENFP"; 
+            if(!resultData[type]) type = "ENFP";
+            const data = resultData[type];
+            document.getElementById('resultTitle').innerText = data.title;
+            document.getElementById('resultIcon').innerText = data.icon;
+            document.getElementById('resultDesc').innerText = data.desc;
+        }
+        function shareResult() {
+            let type = mbti ? mbti.toUpperCase() : "ENFP";
+            const data = resultData[type];
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '나의 연애 세포 레벨은?',
+                    description: data.title.replace('\n', ' ') + ' - ' + data.desc,
+                    imageUrl: 'https://theduck-lab.com/logo.png', 
+                    link: { mobileWebUrl: window.location.href, webUrl: window.location.href },
+                },
+                buttons: [{ title: '결과 보기', link: { mobileWebUrl: window.location.href, webUrl: window.location.href } }]
+            });
+        }
+        updateResult();
+    </script>
+</body>
+</html>
