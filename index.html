@@ -8,130 +8,57 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9076819245720802"
      crossorigin="anonymous"></script>
 
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
     <meta name="description" content="직장인 유형, 연애 능력, 친구 궁합, 재물운 등 소름 돋는 심리테스트 모음.">
     <meta property="og:title" content="The Duck Lab | 더 덕 랩">
     <meta property="og:description" content="나를 찾아 떠나는 즐거운 여행, The Duck Lab에서 확인하세요.">
+    <meta property="og:image" content="https://theduck-lab.com/logo.png">
     
     <style>
-        /* [스타일 정의] test-it 벤치마킹 + 가독성 강화 */
-        :root { 
-            --bg-color: #f5f5f5; 
-            --card-bg: #ffffff; 
-            --text-main: #222222; 
-            --text-sub: #666666; 
-            --point-color: #FFD700; 
-        }
-        
-        body { 
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            margin: 0; 
-            padding: 0; 
-            line-height: 1.5; 
-        }
-        
+        /* [스타일 정의] */
+        :root { --bg-color: #f5f5f5; --card-bg: #ffffff; --text-main: #222222; --text-sub: #666666; --kakao-yellow: #FEE500; }
+        body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; line-height: 1.5; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
         
-        /* 헤더 */
         header { text-align: center; margin: 40px 0 30px; }
         .logo { font-size: 1.8rem; font-weight: 900; color: #333; letter-spacing: -1px; }
         .logo span { color: #f1c40f; } 
         .subtitle { font-size: 0.95rem; color: var(--text-sub); margin-top: 8px; }
 
-        /* 메인 그리드 (카드 목록) */
-        .grid-container { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 15px; 
-            margin-bottom: 40px; 
-        }
-        
-        .card { 
-            background: var(--card-bg); 
-            border-radius: 16px; 
-            overflow: hidden; 
-            text-decoration: none; 
-            color: inherit; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-            transition: transform 0.2s; 
-            display: flex; 
-            flex-direction: column; 
-            position: relative; 
-        }
+        /* 그리드 및 카드 스타일 */
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 40px; }
+        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; text-decoration: none; color: inherit; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s; display: flex; flex-direction: column; position: relative; }
         .card:hover { transform: translateY(-5px); }
-        
-        /* 썸네일 영역 (색상 + 아이콘) */
-        .card-thumb { 
-            height: 130px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-size: 3.5rem; 
-            position: relative; 
-        }
-        
-        /* 뱃지 (BEST, HOT) */
-        .badge { 
-            position: absolute; 
-            top: 10px; 
-            left: 10px; 
-            font-size: 0.7rem; 
-            font-weight: 800; 
-            padding: 3px 8px; 
-            border-radius: 6px; 
-            color: white; 
-            z-index: 10; 
-        }
-        .bg-best { background: #FF5252; }
-        .bg-hot { background: #FF9800; }
-        .bg-new { background: #2196F3; }
-        .bg-pop { background: #4CAF50; }
-
-        /* 텍스트 영역 */
+        .card-thumb { height: 130px; display: flex; justify-content: center; align-items: center; font-size: 3.5rem; position: relative; }
+        .badge { position: absolute; top: 10px; left: 10px; font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; color: white; z-index: 10; }
+        .bg-best { background: #FF5252; } .bg-hot { background: #FF9800; } .bg-new { background: #2196F3; } .bg-pop { background: #4CAF50; }
         .card-body { padding: 15px; text-align: left; }
+        .card-title { font-size: 1.05rem; font-weight: 800; margin: 0 0 6px 0; color: #111; line-height: 1.3; letter-spacing: -0.5px; }
+        .card-desc { font-size: 0.8rem; color: #888; line-height: 1.4; word-break: keep-all; }
+        .ad-area { background-color: white; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 30px; border: 1px solid #eee; color: #ccc; font-size: 0.8rem; }
         
-        /* 제목을 더 확실하게! */
-        .card-title { 
-            font-size: 1.05rem; 
-            font-weight: 800; 
-            margin: 0 0 6px 0; 
-            color: #111; 
-            line-height: 1.3; 
-            letter-spacing: -0.5px;
+        /* 🟡 카카오톡 공유 버튼 스타일 */
+        .kakao-share-btn {
+            background-color: var(--kakao-yellow);
+            color: #3c1e1e;
+            width: 100%;
+            padding: 15px 0;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(254, 229, 0, 0.4);
         }
-        
-        /* 설명도 한눈에 들어오게! */
-        .card-desc { 
-            font-size: 0.8rem; 
-            color: #888; 
-            line-height: 1.4; 
-            word-break: keep-all; 
-        }
+        .kakao-icon { width: 20px; height: 20px; }
 
-        /* 광고 영역 */
-        .ad-area { 
-            background-color: white; 
-            border-radius: 12px; 
-            padding: 20px; 
-            text-align: center; 
-            margin-bottom: 30px; 
-            border: 1px solid #eee; 
-            color: #ccc; 
-            font-size: 0.8rem; 
-        }
-
-        /* 푸터 */
-        footer { 
-            text-align: center; 
-            font-size: 0.75rem; 
-            color: #999; 
-            padding: 40px 0; 
-            border-top: 1px solid #eee; 
-            margin-top: 20px; 
-            line-height: 1.6;
-        }
-        footer a { color: #999; text-decoration: none; }
+        footer { text-align: center; font-size: 0.75rem; color: #999; padding: 40px 0; border-top: 1px solid #eee; margin-top: 20px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -141,64 +68,68 @@
             <p class="subtitle">나를 알아보는 가장 쉬운 방법</p>
         </header>
 
-        <div class="ad-area">
-            💸 광고가 표시되는 영역입니다 💸
-        </div>
+        <div class="ad-area">💸 광고 영역 💸</div>
 
         <div class="grid-container">
             <a href="office.html" class="card">
-                <div class="card-thumb" style="background: #E3F2FD;">
-                    <span class="badge bg-best">BEST</span>
-                    💼
-                </div>
-                <div class="card-body">
-                    <h2 class="card-title">직장인 생존 유형</h2>
-                    <p class="card-desc">나는 팩폭러? 힐링러?<br>소름 돋는 회사 자아 찾기</p>
-                </div>
+                <div class="card-thumb" style="background: #E3F2FD;"><span class="badge bg-best">BEST</span>💼</div>
+                <div class="card-body"><h2 class="card-title">직장인 생존 유형</h2><p class="card-desc">나는 팩폭러? 힐링러?<br>소름 돋는 회사 자아</p></div>
             </a>
-
             <a href="love.html" class="card">
-                <div class="card-thumb" style="background: #FCE4EC;">
-                    <span class="badge bg-hot">HOT</span>
-                    💘
-                </div>
-                <div class="card-body">
-                    <h2 class="card-title">연애 세포 레벨</h2>
-                    <p class="card-desc">죽어가는 연애 세포 심폐소생!<br>내 연애 스타일 분석</p>
-                </div>
+                <div class="card-thumb" style="background: #FCE4EC;"><span class="badge bg-hot">HOT</span>💘</div>
+                <div class="card-body"><h2 class="card-title">연애 세포 레벨</h2><p class="card-desc">죽어가는 연애 세포 심폐소생!<br>내 연애 스타일</p></div>
             </a>
-
             <a href="friend.html" class="card">
-                <div class="card-thumb" style="background: #E8F5E9;">
-                    <span class="badge bg-new">NEW</span>
-                    👯‍♀️
-                </div>
-                <div class="card-body">
-                    <h2 class="card-title">찐친 판독기</h2>
-                    <p class="card-desc">우리는 평생 갈 친구일까?<br>소름 돋는 우정 궁합</p>
-                </div>
+                <div class="card-thumb" style="background: #E8F5E9;"><span class="badge bg-new">NEW</span>👯‍♀️</div>
+                <div class="card-body"><h2 class="card-title">찐친 판독기</h2><p class="card-desc">우리는 평생 갈 친구일까?<br>소름 돋는 우정 궁합</p></div>
             </a>
-
             <a href="money.html" class="card">
-                <div class="card-thumb" style="background: #FFF3E0;">
-                    <span class="badge bg-pop">POP</span>
-                    💸
-                </div>
-                <div class="card-body">
-                    <h2 class="card-title">숨은 돈복 찾기</h2>
-                    <p class="card-desc">나는 평생 얼마를 벌까?<br>재미로 보는 나의 재물운</p>
-                </div>
+                <div class="card-thumb" style="background: #FFF3E0;"><span class="badge bg-pop">POP</span>💸</div>
+                <div class="card-body"><h2 class="card-title">숨은 돈복 찾기</h2><p class="card-desc">나는 평생 얼마를 벌까?<br>재미로 보는 재물운</p></div>
             </a>
         </div>
 
-        <div class="ad-area">
-            💸 광고가 표시되는 영역입니다 💸
-        </div>
+        <button class="kakao-share-btn" onclick="shareKakao()">
+            <svg class="kakao-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3C6.477 3 2 6.646 2 11.143C2 13.985 3.799 16.48 6.514 17.925C6.355 18.529 5.867 20.375 5.808 20.668C5.703 21.189 6.273 21.464 6.648 21.143L11.96 17.03C11.973 17.03 11.987 17.03 12 17.03C17.523 17.03 22 13.384 22 8.887C22 4.39 17.523 3 12 3Z" fill="#3C1E1E"/></svg>
+            친구들에게 연구소 알려주기
+        </button>
+
+        <div class="ad-area">💸 광고 영역 💸</div>
 
         <footer>
             <p>© 2025 The Duck Lab. All rights reserved.</p>
             <p>광고/제휴 문의: blackduck0822@gmail.com</p>
         </footer>
     </div>
+
+    <script>
+        // 1. 나쨩이 찾아온 키로 초기화!
+        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d');
+
+        // 2. 버튼 눌렀을 때 실행되는 함수
+        function shareKakao() {
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: 'The Duck Lab | 오리 연구소',
+                    description: '심심할 때 하기 좋은 심리테스트 모음! 너도 한번 해봐 🦆',
+                    imageUrl: 'https://theduck-lab.com/logo.png', // 나중에 로고 이미지 생기면 예쁘게 뜰 거야
+                    link: {
+                        mobileWebUrl: 'https://theduck-lab.com',
+                        webUrl: 'https://theduck-lab.com',
+                    },
+                },
+                buttons: [
+                    {
+                        title: '테스트 하러 가기',
+                        link: {
+                            mobileWebUrl: 'https://theduck-lab.com',
+                            webUrl: 'https://theduck-lab.com',
+                        },
+                    },
+                ],
+            });
+        }
+    </script>
 </body>
 </html>
