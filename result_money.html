@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숨은 돈복 찾기 결과 | The Duck Lab</title>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9076819245720802" crossorigin="anonymous"></script>
+    <style>
+        body { font-family: 'Pretendard', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; color: #333; }
+        .container { width: 100%; max-width: 600px; background: white; min-height: 100vh; padding: 30px 20px; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .result-subtitle { color: #FF8F00; font-size: 1rem; margin-bottom: 10px; font-weight: bold; }
+        .result-title { font-size: 1.8rem; font-weight: 900; margin: 0 0 30px 0; color: #222; word-break: keep-all; }
+        .result-box { width: 100%; max-width: 350px; padding: 40px 20px; background-color: #FFF3E0; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .result-icon { font-size: 5rem; margin-bottom: 20px; display: block; }
+        .result-desc { background: #fff8e1; padding: 20px; border-radius: 12px; text-align: left; line-height: 1.6; font-size: 0.95rem; margin-bottom: 30px; width: 100%; box-sizing: border-box; color: #444; border: 1px solid #ffecb3; }
+        .desc-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; display: block; color: #F57F17; }
+        .btn-group { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .btn { padding: 18px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; border: none; width: 100%; transition: transform 0.1s; }
+        .btn:active { transform: scale(0.98); }
+        .kakao-btn { background-color: #FEE500; color: #3c1e1e; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .retry-btn { background-color: #333; color: white; }
+        .home-btn { background-color: white; border: 2px solid #eee; color: #666; }
+        .ad-area { width: 100%; background: #fafafa; border: 1px dashed #ddd; padding: 20px; border-radius: 12px; box-sizing: border-box; margin-bottom: 20px; color: #ccc; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="result-subtitle">나의 재물운은?</p>
+        <h1 class="result-title" id="resultTitle">결과 분석 중...</h1>
+        <div class="result-box" id="resultBox"><span class="result-icon" id="resultIcon">💰</span></div>
+        <div class="result-desc">
+            <span class="desc-title">💸 돈복 & 소비 습관</span>
+            <p id="resultDesc">잠시만 기다려주세요...</p>
+        </div>
+        <div class="btn-group">
+            <button class="btn kakao-btn" onclick="shareResult()">카카오톡 공유하기</button>
+            <button class="btn retry-btn" onclick="location.href='moneyintro.html'">테스트 다시하기</button>
+            <button class="btn home-btn" onclick="location.href='index.html'">다른 테스트 보러가기</button>
+        </div>
+        <div class="ad-area">💸 광고 영역 💸</div>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const mbti = urlParams.get('mbti');
+        const resultData = {
+            "ISTJ": { title: "걸어 다니는 가계부\n'짠테크 달인'", icon: "🧾", desc: "100원 단위까지 계산함. 충동구매 절대 안 함. 가장 빨리 부자 될 확률 높음." },
+            "ISFJ": { title: "안정적인 적금왕\n'다람쥐'", icon: "🐿️", desc: "꼬박꼬박 저축함. 모험적인 투자는 무서워서 안 함. 돈 빌려주면 못 받음." },
+            "INFJ": { title: "무소유의 경지\n'미니멀리스트'", icon: "🧘", desc: "돈 욕심 크게 없음. 근데 가치 있는 일(기부, 덕질)에는 돈 펑펑 씀." },
+            "INTJ": { title: "큰 그림 그리는\n'투자 전략가'", icon: "📊", desc: "잔돈 계산 안 함. 주식, 부동산 공부해서 크게 불릴 생각함. 밥값 내는 거 아까워함." },
+            "ISTP": { title: "가성비 감별사\n'실속파'", icon: "🏷️", desc: "최저가 검색의 달인. 필요 없는 건 죽어도 안 삼. 근데 취미 장비에는 수백만 원 씀." },
+            "ISFP": { title: "기분파 소비요정\n'텅장'", icon: "💸", desc: "스트레스 받으면 시발비용 씀. '나를 위한 선물'을 매일 삼. 저축은 내일부터." },
+            "INFP": { title: "현실 감각 제로\n'꿈꾸는 예술가'", icon: "🎨", desc: "돈 관리 너무 어려움. 돈보다는 꿈과 낭만이 중요함. 가끔 충동적으로 비싼 예쁜 쓰레기 삼." },
+            "INTP": { title: "돈에 관심 없음\n'연구원'", icon: "🧪", desc: "먹고살 정도만 있으면 됨. 옷이나 꾸미는 데 돈 안 씀. 근데 게임 아이템은 현질함." },
+            "ESTP": { title: "인생은 한 방\n'사업가 기질'", icon: "🎰", desc: "하이 리스크 하이 리턴 즐김. 돈 잘 벌고 잘 씀. 친구들한테 술 잘 삼." },
+            "ESFP": { title: "오늘만 사는\n'플렉스(FLEX)'", icon: "🥂", desc: "지금 행복한 게 최고. 명품, 핫플 좋아함. 카드값 보면 매달 놀람." },
+            "ENFP": { title: "지름신 강림\n'프로 쇼핑러'", icon: "🛍️", desc: "세일한다고 하면 당장 필요 없어도 삼. 돈 모으는 거 힘듦. 그래도 돈복은 있어서 안 굶어 죽음." },
+            "ENTP": { title: "아이디어로 돈 버는\n'발명가'", icon: "💡", desc: "돈 버는 머리 비상함. 근데 끈기가 없어서 벌어놓고 까먹음. 도박하면 절대 안 됨." },
+            "ESTJ": { title: "돈 냄새 잘 맡는\n'건물주 유망주'", icon: "🏢", desc: "경제 관념 투철함. 자산 관리 철저함. 낭비하는 꼴을 못 봄. 나중에 제일 부자 돼있을 스타일." },
+            "ESFJ": { title: "베푸는 큰손\n'기부 천사'", icon: "🎁", desc: "남들 챙기는 데 돈 다 씀. 밥 잘 사주는 예쁜 누나/오빠. 인맥이 곧 재산이라고 생각함." },
+            "ENFJ": { title: "돈보다 사람\n'평화주의자'", icon: "🕊️", desc: "돈 때문에 사람 잃는 거 싫어함. 더치페이하기 애매하면 그냥 내가 냄. 착한데 호구 될 수 있음." },
+            "ENTJ": { title: "걸어 다니는 기업\n'CEO'", icon: "🦁", desc: "돈이 곧 권력. 일해서 돈 버는 거 즐김. 푼돈 아끼기보다 수입을 늘리는 주의." }
+        };
+        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d'); 
+        function updateResult() {
+            let type = mbti ? mbti.toUpperCase() : "ENTJ"; 
+            if(!resultData[type]) type = "ENTJ";
+            const data = resultData[type];
+            document.getElementById('resultTitle').innerText = data.title;
+            document.getElementById('resultIcon').innerText = data.icon;
+            document.getElementById('resultDesc').innerText = data.desc;
+        }
+        function shareResult() {
+            let type = mbti ? mbti.toUpperCase() : "ENTJ";
+            const data = resultData[type];
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '나의 숨은 돈복은?',
+                    description: data.title.replace('\n', ' ') + ' - ' + data.desc,
+                    imageUrl: 'https://theduck-lab.com/logo.png', 
+                    link: { mobileWebUrl: window.location.href, webUrl: window.location.href },
+                },
+                buttons: [{ title: '결과 보기', link: { mobileWebUrl: window.location.href, webUrl: window.location.href } }]
+            });
+        }
+        updateResult();
+    </script>
+</body>
+</html>
