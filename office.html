@@ -1,213 +1,203 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4M3T8RY7Z3"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-4M3T8RY7Z3');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>직장인 생존 유형 테스트</title>
-    
-    <meta name="description" content="회사에서 나는 어떤 오리일까? 3분 만에 알아보는 직장인 생존 유형 테스트!">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="직장인 멘탈 성향 테스트 - The Duck">
-    <meta property="og:description" content="상사한테 깨졌을 때 당신의 반응은? 100% 리얼 상황극 테스트">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/7074/7074987.png">
-    <meta property="og:url" content="https://blackduck01.github.io/the-duck/office.html">
-
-    <link rel="stylesheet" href="style.css">
-    
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
+    <title>직장인 생존 유형 테스트 | The Duck Lab</title>
     <style>
-        .app-container {
-            background: white;
-            padding: 30px 20px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        /* 🎨 스타일 정의 */
+        body { font-family: 'Pretendard', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 600px; background: white; height: 100vh; display: flex; flex-direction: column; position: relative; }
+        
+        /* 1. 상단 진행 바 */
+        .progress-container { width: 100%; height: 6px; background-color: #eee; }
+        .progress-bar { height: 100%; background-color: #FFD700; width: 0%; transition: width 0.3s; }
+        .page-count { text-align: right; font-size: 0.8rem; color: #999; padding: 10px 20px 0; font-weight: bold; }
+
+        /* 2. 질문 영역 */
+        .question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 30px; text-align: center; }
+        .q-title { font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; line-height: 1.4; color: #333; word-break: keep-all; }
+        .q-emoji { font-size: 4rem; margin-bottom: 30px; }
+
+        /* 3. 답변 버튼 영역 */
+        .answer-area { padding: 0 20px 50px; display: flex; flex-direction: column; gap: 15px; }
+        .btn { 
+            width: 100%; 
+            padding: 20px; 
+            border: 2px solid #f1f1f1; 
+            background: #fff; 
+            border-radius: 16px; 
+            font-size: 1rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            color: #444; 
+            transition: all 0.1s; 
             text-align: center;
-            border: 2px solid #FFE082;
-            min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            max-width: 420px;
-            margin: 0 auto;
+            line-height: 1.4;
         }
-        .btn {
-            width: 100%;
-            padding: 18px;
-            margin: 8px 0;
-            border: none;
-            border-radius: 16px;
-            background-color: #FFD600;
-            color: #333;
-            font-size: 17px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 0 #FBC02D;
-        }
-        .btn:active { transform: translateY(4px); box-shadow: none; }
-        .btn.outline {
-            background: white;
-            border: 2px solid #eee;
-            box-shadow: 0 2px 0 #eee;
-            color: #555;
-        }
-        .progress-bar { width: 100%; height: 8px; background: #f0f0f0; border-radius: 5px; margin-bottom: 30px; overflow: hidden; }
-        .progress-fill { height: 100%; background: #FF6B6B; transition: width 0.3s; }
-        .box { background: #F9F9F9; padding: 22px; border-radius: 18px; margin: 15px 0; text-align: left; }
-        .tag { display: inline-block; padding: 6px 14px; background: #2c3e50; color: white; border-radius: 20px; font-size: 13px; margin-bottom: 12px; font-weight: 700; }
-        .duck-img { font-size: 80px; margin: 20px 0; animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .fade-in { animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .btn:hover { background-color: #FFF9C4; border-color: #FFD700; color: #333; }
+        .btn:active { transform: scale(0.98); background-color: #FFD700; border-color: #FFD700; }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div class="container">
+        <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="page-count"><span id="currentNum">1</span> / 12</div>
 
-    <script type="text/babel">
-        const { useState } = React;
+        <div class="question-area">
+            <div class="q-emoji" id="qEmoji">👀</div>
+            <div class="q-title" id="qTitle">문제 로딩 중...</div>
+        </div>
 
-        const QUESTIONS = [
-            { id: 1, type: "EI", q: "출근길, 회사 로비에서 안 친한 동료를 발견했다!", a: "자연스럽게 다가가서 '좋은 아침입니다!' 인사한다.", b: "핸드폰 보는 척하며 다음 엘리베이터를 기다린다." },
-            { id: 2, type: "JP", q: "내일 오전 회의 자료를 준비해야 한다.", a: "목차부터 결론까지 완벽하게 세팅해놓고 퇴근한다.", b: "일단 큰 틀만 잡고, 내일 아침의 나에게 맡긴다." },
-            { id: 3, type: "TF", q: "후배가 실수해서 시말서를 쓰고 울고 있다.", a: "많이 놀랐지? 괜찮아, 누구나 실수할 수 있어. (토닥토닥)", b: "어디서 틀린 거야? 다음엔 더블 체크 꼭 해. (해결책)" },
-            { id: 4, type: "EI", q: "점심시간, 오늘은 혼밥이 너무 하고 싶다.", a: "그래도 다 같이 먹어야지... 눈치 보며 따라간다.", b: "'저 오늘 약속 있어서요!' 당당하게 말하고 혼자 먹는다." },
-            { id: 5, type: "TF", q: "회의 중 내 아이디어가 까였다. 기분이 어떤가?", a: "내가 그렇게 별론가...? 하루 종일 우울하고 의기소침하다.", b: "왜? 논리가 부족했나? 다음엔 보완해서 설득해야지." },
-            { id: 6, type: "JP", q: "갑자기 팀장님이 '지금 당장 이것 좀 해줘'라고 한다.", a: "아... 내 오늘 계획 다 꼬였네. (스트레스 급상승)", b: "넵! 알겠습니다! (하던 거 멈추고 바로 태세 전환)" },
-            { id: 7, type: "EI", q: "회식 자리, 노래방에 가서 마이크를 잡았다.", a: "분위기 띄우는 신나는 곡! 탬버린은 나의 것!", b: "구석에서 박수만 열심히 친다. (제발 나 시키지 마...)" },
-            { id: 8, type: "TF", q: "동료가 '나 요즘 번아웃 온 것 같아'라고 한다.", a: "헐 ㅠㅠ 요즘 너무 무리했어. 주말에 맛있는 거 먹으러 갈까?", b: "휴가 며칠 남았어? 일단 연차 쓰고 좀 쉬고 와." },
-            { id: 9, type: "JP", q: "바탕화면의 파일 정리 상태는?", a: "프로젝트별/날짜별 폴더로 깔끔하게 정리되어 있다.", b: "'새 폴더', '새 폴더(2)', '최종_진짜최종.hwp'가 널려있다." },
-            { id: 10, type: "EI", q: "새로운 프로젝트 팀이 꾸려졌다. 나의 포지션은?", a: "리더나 발표자가 되어 적극적으로 의견을 낸다.", b: "서기나 자료 조사를 맡아 조용히 서포트한다." },
-            { id: 11, type: "TF", q: "상사가 말도 안 되는 지시를 내린다.", a: "'아... 네...' (속으로는 욕하지만 겉으로는 상처받음)", b: "'이건 효율이 너무 떨어지는데요?' (논리적으로 따져봄)" },
-            { id: 12, type: "JP", q: "퇴근 10분 전, 업무가 거의 끝났다.", a: "내일 할 일 리스트를 작성하고 책상을 정리한다.", b: "칼퇴 준비 완료! 가방 싸고 시계만 쳐다본다." },
-            { id: 13, type: "EI", q: "주말에 회사 사람 결혼식이 있다.", a: "오랜만에 다들 보겠네! 가서 인사도 하고 밥도 먹고 온다.", b: "축의금만 보내고 집에서 쉰다. 주말까지 회사 사람 보기 싫어." },
-            { id: 14, type: "TF", q: "내가 칭찬받았을 때 더 기분 좋은 말은?", a: "역시 나쨩님은 센스쟁이! 팀의 비타민이에요!", b: "이번 기획안 논리가 완벽하네요. 성과가 기대됩니다." },
-            { id: 15, type: "JP", q: "여행 계획을 짤 때 나는?", a: "맛집, 카페, 동선 엑셀 파일로 정리 끝.", b: "비행기랑 숙소만 예약함. 나머진 가서 정하자." },
-            { id: 16, type: "EI", q: "모르는 번호로 전화가 왔다.", a: "여보세요? (바로 받는다)", b: "누구지...? (검색해보고 안 받거나 끊길 때까지 기다림)" },
-            { id: 17, type: "TF", q: "친구가 차 사고가 났다고 전화했다.", a: "헐! 몸은 괜찮아? 안 다쳤어? ㅠㅠ", b: "보험사는 불렀어? 과실 비율은 어떻게 된대?" },
-            { id: 18, type: "JP", q: "매뉴얼이 없는 새로운 업무를 맡았다.", a: "전임자 자료부터 찾아서 체계를 만들고 시작한다.", b: "일단 부딪혀보면서 감으로 배운다." },
-            { id: 19, type: "EI", q: "팀플 하는데 아무도 말을 안 한다.", a: "어색한 거 못 참음. 내가 먼저 아이스브레이킹을 시도한다.", b: "누가 말할 때까지 침묵을 유지한다." },
-            { id: 20, type: "TF", q: "나를 더 화나게 하는 동료는?", a: "말을 기분 나쁘게 틱틱거리는 사람", b: "일 못해서 나한테 피해 주는 사람" },
-            { id: 21, type: "JP", q: "쇼핑할 때 나는?", a: "가격 비교, 후기 분석 다 하고 최저가로 산다.", b: "오 이거 예쁘다! 바로 결제." },
-            { id: 22, type: "EI", q: "관심 받는 걸 좋아하는가?", a: "은근히 즐김. 주인공이 되면 짜릿함.", b: "부담스러움. 제발 나를 투명 인간 취급해줘." },
-            { id: 23, type: "TF", q: "고민 상담을 해줄 때 나는?", a: "공감해주고 같이 욕해주는 리액션 봇", b: "현실적인 조언을 해주는 팩트 폭격기" },
-            { id: 24, type: "JP", q: "약속 시간에 늦을 것 같다.", a: "이미 30분 전부터 초조해서 뛰어가고 있다.", b: "아 조금 늦겠네~ 뭐 어때 천천히 가자." }
+        <div class="answer-area">
+            <button class="btn" id="btnA" onclick="selectAnswer('A')">답변 A</button>
+            <button class="btn" id="btnB" onclick="selectAnswer('B')">답변 B</button>
+        </div>
+    </div>
+
+    <script>
+        // 🧐 [질문 데이터] 직장인 생존 유형 (12문제)
+        // type: EI(에너지), SN(인식), TF(판단), JP(생활)
+        const qnaList = [
+            {
+                q: "출근길 엘리베이터 앞,\n저 멀리 팀장님이 보인다!",
+                emoji: "🏢",
+                a: { text: "헉.. (못 본 척 핸드폰을 보며 다음 걸 탄다)", type: "I" },
+                b: { text: "팀장님!! (반갑게? 인사하며 같이 탄다)", type: "E" }
+            },
+            {
+                q: "점심시간, 오늘따라 메뉴가\n도저히 결정되지 않는다.",
+                emoji: "🍽️",
+                a: { text: "누가 정해주겠지... 대세에 따른다.", type: "J" }, // 수동적/안정 (J or S쪽 해석 가능하지만 여기선 P/J패턴으로) -> 수정: 유연함(P) vs 계획(J) 보단 주도성. 일단 P로 두거나 상황 맞춰 조정. 
+                // MBTI 정석 질문으로 수정:
+                // J: 계획대로 / P: 즉흥적으로
+                // S: 현실적 / N: 상상력
+                // T: 논리 / F: 공감
+                // 다시 세팅!
+                b: { text: "그냥 눈에 보이는 식당 아무데나 들어간다.", type: "P" }
+            },
+            {
+                q: "업무 중 실수를 발견했다!\n식은땀이 흐르는데...",
+                emoji: "💦",
+                a: { text: "일단 수습부터 하고 나중에 보고한다.", type: "T" },
+                b: { text: "어떡하지? 옆자리 동료한테 털어놓는다.", type: "F" }
+            },
+            {
+                q: "회의 시간, 새로운 아이디어를\n내보라는 지시가 떨어졌다.",
+                emoji: "💡",
+                a: { text: "현실적으로 가능한 방법부터 찾는다.", type: "S" },
+                b: { text: "일단 기발하고 획기적인 상상을 해본다.", type: "N" }
+            },
+            {
+                q: "주말에 회사 워크샵을 간다고 한다.\n나의 속마음은?",
+                emoji: "🚌",
+                a: { text: "아... 내 주말... (기가 빨린다)", type: "I" },
+                b: { text: "오? 술 마시고 놀겠네? (살짝 설렘)", type: "E" }
+            },
+            {
+                q: "상사가 두루뭉술하게\n'이것 좀 잘 처리해줘'라고 했다.",
+                emoji: "🤔",
+                a: { text: "센스 있게 알아서 처리한다. (융통성)", type: "N" },
+                b: { text: "정확한 가이드라인을 다시 물어본다.", type: "S" }
+            },
+            {
+                q: "동료가 상사에게 깨지고\n우울해하고 있다.",
+                emoji: "😭",
+                a: { text: "무슨 일이야? 많이 힘들었겠다.. (공감)", type: "F" },
+                b: { text: "김부장이 원래 그래. 신경 쓰지 마. (해결)", type: "T" }
+            },
+            {
+                q: "내일 연차를 썼다!\n오늘 나의 퇴근 준비는?",
+                emoji: "✈️",
+                a: { text: "내일 할 일까지 완벽하게 세팅해놓고 간다.", type: "J" },
+                b: { text: "일단 끄고 튀어! 내일 일은 내일 생각하자.", type: "P" }
+            },
+             {
+                q: "회사 단톡방에 공지가 올라왔다.\n사람들의 반응이 없다.",
+                emoji: "📱",
+                a: { text: "내가라도 '네 알겠습니다~' 하고 올린다.", type: "E" },
+                b: { text: "누가 읽었나 숫자만 확인하고 있는다.", type: "I" }
+            },
+            {
+                q: "점심 먹고 카페,\n신메뉴가 나왔다!",
+                emoji: "☕",
+                a: { text: "먹던 거 먹자. (아아 주세요)", type: "S" },
+                b: { text: "오 저거 뭐지? 도전해본다.", type: "N" }
+            },
+            {
+                q: "팀장님이 '요즘 힘든 거 없나?'\n하며 면담을 요청했다.",
+                emoji: "💬",
+                a: { text: "감정적인 고충을 솔직하게 털어놓는다.", type: "F" },
+                b: { text: "업무적인 애로사항 위주로 이야기한다.", type: "T" }
+            },
+            {
+                q: "갑자기 1시간 뒤에\n긴급 회의가 잡혔다!",
+                emoji: "🚨",
+                a: { text: "하던 일 멈추고 자료 준비부터 한다. (계획)", type: "J" },
+                b: { text: "일단 가보지 뭐. 가서 생각한다. (임기응변)", type: "P" }
+            }
         ];
 
-        const RESULTS = {
-            "ETJ": { name: "폭주하는 불도저 오리 🔥", desc: "답답한 건 질색! 일잘러지만 성격 급한 리더형", heal: "다들 당신만큼 빠르진 않아요. 커피 한 잔의 여유를!", item: "따뜻한 캐모마일 티 🍵" },
-            "ETP": { name: "협상의 신, 사기꾼 오리 🦊", desc: "잔머리 대마왕! 벼락치기로 성과 내는 효율맨", heal: "잔머리도 머리라 피곤해요. 뇌를 식혀주세요.", item: "쿨링 마사지 팩 ❄️" },
-            "EFJ": { name: "오지라퍼 캉가루 오리 🦘", desc: "우리 팀 챙기느라 정작 내 일은 야근하는 천사", heal: "남 말고 나부터 챙기세요. 거절하는 연습이 필요해요.", item: "나를 위한 명품 초콜릿 🍫" },
-            "EFP": { name: "해맑은 리트리버 오리 🐶", desc: "실수해도 헤헤 웃으면 용서됨. 분위기 메이커!", heal: "텐션 높이는 것도 체력 소모예요. 오늘은 집콕하세요.", item: "수면 안대 & ASMR 🎧" },
-            "ITJ": { name: "AI 탑재한 로봇 오리 🤖", desc: "감정? 그게 뭐죠? 입력된 업무를 완벽히 수행합니다.", heal: "너무 빡빡하게 굴면 부러져요. 가끔은 멍 때려보세요.", item: "불멍 무드등 🔥" },
-            "ITP": { name: "방구석 천재, 나무늘보 오리 🦥", desc: "귀찮지만 시키면 기가 막히게 해냄. 효율 추구형", heal: "귀차니즘은 지능이 높다는 증거! 침대 밖은 위험해요.", item: "바디필로우 🛌" },
-            "IFJ": { name: "속 끓이는 착한 오리 🦢", desc: "거절 못하고 '넵' 하다가 집에 가서 이불 킥함", heal: "속으로 삭히면 병나요. 임금님 귀는 당나귀 귀 하세요!", item: "대나무 숲 일기장 📒" },
-            "IFP": { name: "상처받은 유리멘탈 오리 🐣", desc: "상사의 한숨 소리에도 심장이 철렁하는 감성파", heal: "당신 잘못이 아니에요. 스스로를 토닥여주세요.", item: "포근한 담요 🧣" }
-        };
+        // 점수 저장용 (MBTI)
+        let score = { E:0, I:0, S:0, N:0, T:0, F:0, J:0, P:0 };
+        let currentStep = 0;
 
-        function App() {
-            const [step, setStep] = useState(0);
-            const [scores, setScores] = useState({ E:0, I:0, T:0, F:0, J:0, P:0 });
+        const progressBar = document.getElementById('progressBar');
+        const currentNum = document.getElementById('currentNum');
+        const qTitle = document.getElementById('qTitle');
+        const qEmoji = document.getElementById('qEmoji');
+        const btnA = document.getElementById('btnA');
+        const btnB = document.getElementById('btnB');
 
-            const handleAnswer = (type, idx) => {
-                const target = idx === 0 ? type[0] : type[1]; 
-                setScores(prev => ({ ...prev, [target]: prev[target] + 1 }));
-                
-                if (step < QUESTIONS.length) {
-                    setStep(prev => prev + 1);
-                } else {
-                    setStep(QUESTIONS.length + 1); 
-                    setTimeout(() => {
-                        setStep(QUESTIONS.length + 2); 
-                    }, 3000); 
-                }
-            };
+        // 초기 실행
+        setQuestion();
 
-            const getResult = () => {
-                const r1 = scores.E > scores.I ? "E" : "I";
-                const r2 = scores.T > scores.F ? "T" : "F";
-                const r3 = scores.J > scores.P ? "J" : "P";
-                return RESULTS[r1 + r2 + r3];
-            };
+        // 화면 세팅 함수
+        function setQuestion() {
+            let q = qnaList[currentStep];
+            
+            // 진행 바 업데이트
+            let percent = (currentStep / 12) * 100;
+            progressBar.style.width = percent + '%';
+            currentNum.innerText = currentStep + 1;
 
-            return (
-                <div className="app-container fade-in">
-                    <div className="ad-banner">💰 상단 광고 영역 💰</div>
-
-                    {step === 0 && (
-                        <div>
-                            <div className="tag">The Duck Office</div>
-                            <h1>직장인 멘탈<br/>자가진단 테스트</h1>
-                            <div className="duck-img">🦆</div>
-                            <p>정글 같은 회사 생활,<br/>나는 팩폭러일까? 힐링러일까?</p>
-                            <p style={{fontSize:'14px', color:'#999', marginTop: '10px'}}>총 24문항 / 소요시간 3분</p>
-                            <button className="btn" onClick={() => setStep(1)}>진단 시작하기</button>
-                            <button className="btn outline" onClick={() => location.href='index.html'}>메인으로 돌아가기</button>
-                        </div>
-                    )}
-                    
-                    {step >= 1 && step <= QUESTIONS.length && (
-                        <div>
-                            <div className="progress-bar"><div className="progress-fill" style={{width: `${(step/QUESTIONS.length)*100}%`}}></div></div>
-                            <div className="tag">Q{step}</div>
-                            <h2>{QUESTIONS[step-1].q}</h2>
-                            <button className="btn outline" onClick={() => handleAnswer(QUESTIONS[step-1].type, 0)}>{QUESTIONS[step-1].a}</button>
-                            <button className="btn outline" onClick={() => handleAnswer(QUESTIONS[step-1].type, 1)}>{QUESTIONS[step-1].b}</button>
-                        </div>
-                    )}
-
-                    {step === QUESTIONS.length + 1 && (
-                        <div className="fade-in">
-                            <div className="duck-img" style={{fontSize:'60px'}}>⏳</div>
-                            <h2>나의 오리 유형 분석 중...</h2>
-                            <p>잠시만 기다려주세요!</p>
-                            <div className="ad-banner" style={{height:'200px'}}>💰 전면 광고 영역 (수익 꿀통) 💰</div>
-                        </div>
-                    )}
-
-                    {step === QUESTIONS.length + 2 && (
-                        <div>
-                            <div className="tag">당신의 유형은</div>
-                            <div className="duck-img" style={{fontSize: '60px'}}>👑</div>
-                            <h1>{getResult().name}</h1>
-                            
-                            <div className="box">
-                                <h3>📊 팩폭 분석</h3>
-                                <p>{getResult().desc}</p>
-                            </div>
-                            
-                            <div className="box" style={{background: '#FFF8E1', border: '1px solid #FFD54F'}}>
-                                <h3>💊 힐링 처방전</h3>
-                                <p>{getResult().heal}</p>
-                                <hr style={{opacity: 0.3}}/>
-                                <small>추천 아이템: <b>{getResult().item}</b></small>
-                            </div>
-
-                            <button className="btn" onClick={() => window.location.reload()}>테스트 다시 하기</button>
-                            <button className="btn outline" onClick={() => location.href='index.html'}>다른 테스트 하러 가기</button>
-                            
-                            <div className="ad-banner">💰 하단 광고 영역 💰</div>
-                        </div>
-                    )}
-                </div>
-            );
+            // 질문 및 버튼 텍스트 변경
+            qEmoji.innerText = q.emoji;
+            qTitle.innerText = q.q;
+            btnA.innerText = q.a.text;
+            btnB.innerText = q.b.text;
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        // 답변 선택 시 실행 함수
+        function selectAnswer(choice) {
+            let q = qnaList[currentStep];
+            let type = (choice === 'A') ? q.a.type : q.b.type;
+            
+            // 점수 추가
+            score[type]++;
+
+            // 다음 문제로
+            currentStep++;
+            
+            if(currentStep < 12) {
+                setQuestion();
+            } else {
+                goResult();
+            }
+        }
+
+        // 결과 계산 및 이동
+        function goResult() {
+            // MBTI 조합 계산
+            let mbti = "";
+            mbti += (score.E > score.I) ? "E" : "I";
+            mbti += (score.S > score.N) ? "S" : "N";
+            mbti += (score.T > score.F) ? "T" : "F";
+            mbti += (score.J > score.P) ? "J" : "P";
+
+            // 결과 페이지로 이동 (쿼리스트링으로 mbti 전달)
+            location.href = `result_office.html?mbti=${mbti}`;
+        }
     </script>
 </body>
 </html>
