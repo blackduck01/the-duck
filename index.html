@@ -33,8 +33,6 @@
 
     <script type="text/babel">
         function App() {
-            const handleAlert = (msg) => { alert(msg); };
-
             return (
                 <div className="container">
                     <header>
@@ -66,25 +64,25 @@
                             </div>
                         </a>
 
-                        {/* 3. 돈복 테스트 (NEW!) */}
+                        {/* 3. 우정 테스트 (✨ 드디어 오픈!) */}
+                        <a href="friend.html" className="card">
+                            <div className="card-img bg-blue">👯‍♀️</div>
+                            <div className="card-body">
+                                <span className="badge" style={{backgroundColor: '#BBDEFB', color: '#555'}}>NEW</span>
+                                <span className="title">찐친 판독기</span>
+                                <span className="desc">우리는 평생 갈 친구일까? 소름 돋는 우정 궁합</span>
+                            </div>
+                        </a>
+
+                        {/* 4. 돈복 테스트 */}
                         <a href="money.html" className="card">
                             <div className="card-img bg-green">💸</div>
                             <div className="card-body">
-                                <span className="badge" style={{backgroundColor: '#C8E6C9', color: '#555'}}>NEW</span>
+                                <span className="badge" style={{backgroundColor: '#C8E6C9', color: '#555'}}>POPULAR</span>
                                 <span className="title">숨은 돈복 찾기</span>
                                 <span className="desc">나는 평생 얼마를 벌까? 재미로 보는 나의 재물운</span>
                             </div>
                         </a>
-
-                        {/* 4. 우정 테스트 (준비중) */}
-                        <div className="card" onClick={() => handleAlert('친구랑 싸우지 마세요! 곧 나옵니다! 👯‍♀️')}>
-                            <div className="card-img bg-blue">👯‍♀️</div>
-                            <div className="card-body">
-                                <span className="badge" style={{backgroundColor: '#BBDEFB', color: '#555'}}>COMING SOON</span>
-                                <span className="title">찐친 판독기</span>
-                                <span className="desc">우리는 평생 갈 친구일까? 소름 돋는 우정 궁합</span>
-                            </div>
-                        </div>
                     </div>
 
                     <div className="ad-banner">💰 하단 광고 영역 💰</div>
