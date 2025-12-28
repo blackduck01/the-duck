@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Duck Lab | 더 덕 랩</title>
+    <title>The Duck Lab</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦆</text></svg>">
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9076819245720802"
      crossorigin="anonymous"></script>
@@ -56,8 +58,6 @@
             box-shadow: 0 4px 10px rgba(254, 229, 0, 0.4);
         }
         .kakao-icon { width: 20px; height: 20px; }
-
-        footer { text-align: center; font-size: 0.75rem; color: #999; padding: 40px 0; border-top: 1px solid #eee; margin-top: 20px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -95,14 +95,18 @@
 
         <div class="ad-area">💸 광고 영역 💸</div>
 
-        <footer>
+        <footer style="margin-top: 50px; padding: 30px 0; border-top: 1px solid #eee; text-align: center; color: #999; font-size: 0.8rem;">
             <p>© 2025 The Duck Lab. All rights reserved.</p>
-            <p>광고/제휴 문의: blackduck0822@gmail.com</p>
+            <div style="margin: 10px 0;">
+                <a href="privacy.html" style="color: #999; text-decoration: none; font-weight: bold;">개인정보처리방침</a>
+                <span style="margin: 0 10px;">|</span>
+                <span>광고/제휴 문의: blackduck0822@gmail.com</span>
+            </div>
         </footer>
     </div>
 
     <script>
-        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d'); // 나쨩의 소중한 키!
+        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d'); 
 
         function shareKakao() {
             Kakao.Share.sendDefault({
