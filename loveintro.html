@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연애 세포 레벨 테스트 | The Duck Lab</title>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9076819245720802" crossorigin="anonymous"></script>
+
+    <style>
+        /* 메인화면과 통일감 유지 */
+        body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; color: #333; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* 상단 헤더 */
+        header { padding: 20px; position: relative; border-bottom: 1px solid #eee; text-align: center; }
+        .back-btn { position: absolute; left: 20px; top: 18px; text-decoration: none; font-size: 1.5rem; color: #333; font-weight: bold; }
+        .header-title { font-weight: 800; font-size: 1.1rem; }
+
+        /* 본문 */
+        .content { padding: 40px 25px; text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; }
+        
+        /* 1. 썸네일 (분홍색 둥둥) */
+        .main-icon { 
+            width: 140px; height: 140px; 
+            background-color: #FCE4EC; 
+            border-radius: 45px; 
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 4.5rem; 
+            margin-bottom: 30px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+            animation: float 3s ease-in-out infinite; 
+        }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        
+        /* 2. 제목 */
+        h1 { font-size: 1.7rem; font-weight: 900; margin: 0 0 20px 0; color: #222; letter-spacing: -0.5px; word-break: keep-all; }
+        
+        /* 3. 설명글 (힙한 말투 Ver.) */
+        .desc-box { 
+            background: #fff; 
+            padding: 10px; 
+            color: #444; 
+            font-size: 1.05rem; 
+            margin-bottom: 30px; 
+            text-align: center; 
+            line-height: 1.6;
+            word-break: keep-all;
+        }
+        .highlight { background: linear-gradient(to top, #FCE4EC 50%, transparent 50%); font-weight: bold; color: #E91E63; }
+
+        /* 4. 시작 버튼 */
+        .start-btn { 
+            background-color: #FFD700; 
+            color: #333; 
+            font-size: 1.3rem; 
+            font-weight: 800; 
+            padding: 18px 0; 
+            width: 100%; 
+            border-radius: 16px; 
+            border: none; 
+            cursor: pointer; 
+            text-decoration: none; 
+            display: block;
+            box-shadow: 0 4px 0 #E5C100; 
+            transition: all 0.1s;
+            margin-bottom: 20px;
+        }
+        .start-btn:active { transform: translateY(4px); box-shadow: none; }
+
+        /* 5. 광고 영역 (버튼 밑 꿀자리) */
+        .ad-area { 
+            width: 100%; 
+            min-height: 250px; 
+            background: #fafafa; 
+            border-radius: 12px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            color: #ccc; 
+            font-size: 0.8rem;
+            border: 1px dashed #ddd; 
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-btn">←</a>
+            <span class="header-title">The Duck Lab</span>
+        </header>
+
+        <div class="content">
+            <div class="main-icon">💘</div>
+
+            <h1>연애 세포 레벨 테스트</h1>
+
+            <div class="desc-box">
+                <p>
+                    혹시... 마지막 연애가 언제야? 🤔<br>
+                    설마 연애 세포 다 죽은 거 아니지?
+                </p>
+                <br>
+                <p>
+                    철벽 치는 스타일 vs 금사빠 스타일<br>
+                    내 진짜 <span class="highlight">연애 능력치</span>는 몇 점?
+                </p>
+                <br>
+                <p style="font-weight: 800; color: #222;">
+                    내 연애가 안 풀리는 이유,<br>
+                    팩폭 맞고 정신 차리자! 🚑
+                </p>
+            </div>
+
+            <a href="love.html" class="start-btn">테스트 시작하기</a>
+
+            <div class="ad-area">
+                💸 광고 영역 (수익 2배 자리) 💸
+            </div>
+        </div>
+    </div>
+</body>
+</html>
