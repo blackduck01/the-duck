@@ -1,105 +1,97 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta name="google-site-verification" content="" />
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4M3T8RY7Z3"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-4M3T8RY7Z3');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Duck Lab: 오리 연구소</title>
-    
-    <meta name="description" content="나의 직장인 생존 유형은? 다양한 심리테스트로 나를 알아보세요!">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="The Duck Lab: 오리 연구소">
-    <meta property="og:description" content="나 팩폭러일까? 힐링러일까? 소름 돋는 자아 찾기 무료 테스트!">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/2663/2663067.png">
-    <meta property="og:url" content="https://blackduck01.github.io/the-duck/">
+    <title>The Duck Lab | 나쨩의 심리테스트 연구소</title>
 
-    <link rel="stylesheet" href="style.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9076819245720802"
+     crossorigin="anonymous"></script>
+
+    <meta name="description" content="직장인 생존 유형, 연애 세포, 찐친 판독기, 숨은 돈복 찾기 등 다양한 심리테스트를 즐겨보세요!">
+    <meta property="og:title" content="The Duck Lab | 오리 연구소">
+    <meta property="og:description" content="나의 본캐는 어떤 오리일까? 지금 바로 확인해보세요!">
     
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        /* 스타일 (디자인) */
+        :root { --primary-color: #F4D03F; --bg-color: #f8f9fa; --text-color: #333; }
+        body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; margin-bottom: 30px; padding-top: 20px; }
+        .logo { font-size: 3rem; margin-bottom: 10px; display: block; }
+        h1 { margin: 0; font-size: 1.8rem; font-weight: 800; color: #2c3e50; }
+        .subtitle { font-size: 0.95rem; color: #666; margin-top: 5px; }
+
+        /* 카드 그리드 레이아웃 */
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .card { background: white; border-radius: 20px; padding: 20px; text-decoration: none; color: inherit; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .card:hover { transform: translateY(-5px); }
+        .card-icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .card-tag { font-size: 0.7rem; font-weight: bold; padding: 4px 8px; border-radius: 10px; margin-bottom: 10px; display: inline-block; }
+        
+        .tag-best { background-color: #fff3cd; color: #856404; }
+        .tag-hot { background-color: #f8d7da; color: #721c24; }
+        .tag-new { background-color: #d1ecf1; color: #0c5460; }
+        .tag-pop { background-color: #d4edda; color: #155724; }
+        
+        .card-title { font-size: 1rem; font-weight: bold; margin-bottom: 5px; }
+        .card-desc { font-size: 0.8rem; color: #888; line-height: 1.4; word-break: keep-all; }
+
+        /* 광고 영역 표시 (나중에 실제 광고로 바뀔 곳) */
+        .ad-area { background-color: #eee; border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 30px; border: 2px dashed #ddd; font-size: 0.8rem; color: #aaa; }
+
+        footer { text-align: center; font-size: 0.8rem; color: #aaa; padding-bottom: 40px; }
+    </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div class="container">
+        <header>
+            <span class="logo">🦆</span>
+            <h1>The Duck Lab</h1>
+            <p class="subtitle">나쨩의 심리테스트 연구소</p>
+        </header>
 
-    <script type="text/babel">
-        function App() {
-            return (
-                <div className="container">
-                    <header>
-                        <span className="logo">🦆</span>
-                        <h1>The Duck Lab</h1>
-                        <p>나쨩의 심리테스트 연구소</p>
-                    </header>
+        <div class="ad-area">
+            💰 상단 광고 영역 💰
+        </div>
 
-                    <div className="ad-banner">💰 상단 광고 영역 💰</div>
+        <div class="grid-container">
+            <a href="office.html" class="card" style="border-top: 4px solid #F4D03F;">
+                <span class="card-icon">💼</span>
+                <span class="card-tag tag-best">BEST</span>
+                <h2 class="card-title">직장인 생존 유형</h2>
+                <p class="card-desc">나는 팩폭러? 힐링러? 소름 돋는 직장 자아 찾기</p>
+            </a>
 
-                    <div className="test-list">
-                        {/* 1. 직장 테스트 */}
-                        <a href="office.html" className="card">
-                            <div className="card-img bg-yellow">💼</div>
-                            <div className="card-body">
-                                <span className="badge" style={{backgroundColor: '#FFF59D', color: '#555'}}>BEST</span>
-                                <span className="title">직장인 생존 유형</span>
-                                <span className="desc">나는 팩폭러? 힐링러? 소름 돋는 직장 자아 찾기</span>
-                            </div>
-                        </a>
+            <a href="love.html" class="card" style="border-top: 4px solid #FF9999;">
+                <span class="card-icon">💘</span>
+                <span class="card-tag tag-hot">HOT</span>
+                <h2 class="card-title">연애 세포 레벨</h2>
+                <p class="card-desc">죽어가는 연애 세포 심폐소생술! 내 연애 스타일은?</p>
+            </a>
 
-                        {/* 2. 연애 테스트 */}
-                        <a href="love.html" className="card">
-                            <div className="card-img bg-pink">💘</div>
-                            <div className="card-body">
-                                <span className="badge" style={{backgroundColor: '#FFCDD2', color: '#555'}}>HOT</span>
-                                <span className="title">연애 세포 레벨</span>
-                                <span className="desc">죽어가는 연애 세포 심폐소생술! 내 연애 스타일은?</span>
-                            </div>
-                        </a>
+            <a href="friends.html" class="card" style="border-top: 4px solid #99CCFF;">
+                <span class="card-icon">👯‍♀️</span>
+                <span class="card-tag tag-new">NEW</span>
+                <h2 class="card-title">찐친 판독기</h2>
+                <p class="card-desc">우리는 평생 갈 친구일까? 소름 돋는 우정 궁합</p>
+            </a>
 
-                        {/* 3. 우정 테스트 (✨ 드디어 오픈!) */}
-                        <a href="friend.html" className="card">
-                            <div className="card-img bg-blue">👯‍♀️</div>
-                            <div className="card-body">
-                                <span className="badge" style={{backgroundColor: '#BBDEFB', color: '#555'}}>NEW</span>
-                                <span className="title">찐친 판독기</span>
-                                <span className="desc">우리는 평생 갈 친구일까? 소름 돋는 우정 궁합</span>
-                            </div>
-                        </a>
+            <a href="money.html" class="card" style="border-top: 4px solid #99FF99;">
+                <span class="card-icon">💸</span>
+                <span class="card-tag tag-pop">POPULAR</span>
+                <h2 class="card-title">숨은 돈복 찾기</h2>
+                <p class="card-desc">나는 평생 얼마를 벌까? 재미로 보는 나의 재물운</p>
+            </a>
+        </div>
 
-                        {/* 4. 돈복 테스트 */}
-                        <a href="money.html" className="card">
-                            <div className="card-img bg-green">💸</div>
-                            <div className="card-body">
-                                <span className="badge" style={{backgroundColor: '#C8E6C9', color: '#555'}}>POPULAR</span>
-                                <span className="title">숨은 돈복 찾기</span>
-                                <span className="desc">나는 평생 얼마를 벌까? 재미로 보는 나의 재물운</span>
-                            </div>
-                        </a>
-                    </div>
+        <div class="ad-area">
+            💰 하단 광고 영역 💰
+        </div>
 
-                    <div className="ad-banner">💰 하단 광고 영역 💰</div>
-                    
-                    <footer style={{textAlign: 'center', marginTop: '40px', paddingBottom: '20px', color: '#aaa', fontSize: '12px'}}>
-                        <p>&copy; 2025 The Duck Lab. All rights reserved.</p>
-                        <p style={{marginTop: '10px'}}>
-                            <a href="privacy.html" style={{color: '#aaa', textDecoration: 'none', marginRight: '10px'}}>개인정보처리방침</a> | 
-                            <a href="https://github.com/blackduck01" target="_blank" style={{color: '#aaa', textDecoration: 'none', marginLeft: '10px'}}>Contact</a>
-                        </p>
-                    </footer>
-                </div>
-            );
-        }
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+        <footer>
+            <p>© 2025 The Duck Lab. All rights reserved.</p>
+        </footer>
+    </div>
 </body>
 </html>
