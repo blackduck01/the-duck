@@ -16,7 +16,6 @@
     <meta property="og:image" content="https://theduck-lab.com/logo.png">
     
     <style>
-        /* [스타일 정의] */
         :root { --bg-color: #f5f5f5; --card-bg: #ffffff; --text-main: #222222; --text-sub: #666666; --kakao-yellow: #FEE500; }
         body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; line-height: 1.5; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -38,7 +37,7 @@
         .card-desc { font-size: 0.8rem; color: #888; line-height: 1.4; word-break: keep-all; }
         .ad-area { background-color: white; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 30px; border: 1px solid #eee; color: #ccc; font-size: 0.8rem; }
         
-        /* 🟡 카카오톡 공유 버튼 스타일 */
+        /* 카카오톡 공유 버튼 */
         .kakao-share-btn {
             background-color: var(--kakao-yellow);
             color: #3c1e1e;
@@ -71,19 +70,19 @@
         <div class="ad-area">💸 광고 영역 💸</div>
 
         <div class="grid-container">
-            <a href="office.html" class="card">
+            <a href="officeintro.html" class="card">
                 <div class="card-thumb" style="background: #E3F2FD;"><span class="badge bg-best">BEST</span>💼</div>
                 <div class="card-body"><h2 class="card-title">직장인 생존 유형</h2><p class="card-desc">나는 팩폭러? 힐링러?<br>소름 돋는 회사 자아</p></div>
             </a>
-            <a href="love.html" class="card">
+            <a href="loveintro.html" class="card">
                 <div class="card-thumb" style="background: #FCE4EC;"><span class="badge bg-hot">HOT</span>💘</div>
                 <div class="card-body"><h2 class="card-title">연애 세포 레벨</h2><p class="card-desc">죽어가는 연애 세포 심폐소생!<br>내 연애 스타일</p></div>
             </a>
-            <a href="friend.html" class="card">
+            <a href="friendintro.html" class="card">
                 <div class="card-thumb" style="background: #E8F5E9;"><span class="badge bg-new">NEW</span>👯‍♀️</div>
                 <div class="card-body"><h2 class="card-title">찐친 판독기</h2><p class="card-desc">우리는 평생 갈 친구일까?<br>소름 돋는 우정 궁합</p></div>
             </a>
-            <a href="money.html" class="card">
+            <a href="moneyintro.html" class="card">
                 <div class="card-thumb" style="background: #FFF3E0;"><span class="badge bg-pop">POP</span>💸</div>
                 <div class="card-body"><h2 class="card-title">숨은 돈복 찾기</h2><p class="card-desc">나는 평생 얼마를 벌까?<br>재미로 보는 재물운</p></div>
             </a>
@@ -103,17 +102,15 @@
     </div>
 
     <script>
-        // 1. 나쨩이 찾아온 키로 초기화!
-        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d');
+        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d'); // 나쨩의 소중한 키!
 
-        // 2. 버튼 눌렀을 때 실행되는 함수
         function shareKakao() {
             Kakao.Share.sendDefault({
                 objectType: 'feed',
                 content: {
                     title: 'The Duck Lab | 오리 연구소',
                     description: '심심할 때 하기 좋은 심리테스트 모음! 너도 한번 해봐 🦆',
-                    imageUrl: 'https://theduck-lab.com/logo.png', // 나중에 로고 이미지 생기면 예쁘게 뜰 거야
+                    imageUrl: 'https://theduck-lab.com/logo.png', 
                     link: {
                         mobileWebUrl: 'https://theduck-lab.com',
                         webUrl: 'https://theduck-lab.com',
