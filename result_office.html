@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>직장인 생존 유형 테스트 결과 | The Duck Lab</title>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9076819245720802" crossorigin="anonymous"></script>
+
+    <style>
+        body { font-family: 'Pretendard', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; color: #333; }
+        .container { width: 100%; max-width: 600px; background: white; min-height: 100vh; padding: 30px 20px; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        
+        /* 결과 제목 */
+        .result-subtitle { color: #666; font-size: 1rem; margin-bottom: 10px; font-weight: bold; }
+        .result-title { font-size: 1.8rem; font-weight: 900; margin: 0 0 30px 0; color: #222; word-break: keep-all; }
+
+        /* 결과 이미지/박스 */
+        .result-box { 
+            width: 100%; 
+            max-width: 350px; 
+            padding: 40px 20px; 
+            background-color: #E3F2FD; /* 기본 파랑 */
+            border-radius: 20px; 
+            margin-bottom: 30px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .result-icon { font-size: 5rem; margin-bottom: 20px; display: block; }
+        
+        /* 설명글 */
+        .result-desc { 
+            background: #f9f9f9; 
+            padding: 20px; 
+            border-radius: 12px; 
+            text-align: left; 
+            line-height: 1.6; 
+            font-size: 0.95rem; 
+            margin-bottom: 30px; 
+            width: 100%; 
+            box-sizing: border-box; 
+            color: #444;
+        }
+        .desc-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; display: block; color: #333; }
+
+        /* 버튼들 */
+        .btn-group { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .btn { 
+            padding: 18px; 
+            border-radius: 12px; 
+            font-weight: 800; 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            border: none; 
+            width: 100%; 
+            transition: transform 0.1s; 
+        }
+        .btn:active { transform: scale(0.98); }
+        
+        .kakao-btn { background-color: #FEE500; color: #3c1e1e; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .retry-btn { background-color: #333; color: white; }
+        .home-btn { background-color: white; border: 2px solid #eee; color: #666; }
+
+        /* 광고 영역 */
+        .ad-area { width: 100%; background: #fafafa; border: 1px dashed #ddd; padding: 20px; border-radius: 12px; box-sizing: border-box; margin-bottom: 20px; color: #ccc; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="result-subtitle">나의 직장인 생존 유형은?</p>
+        <h1 class="result-title" id="resultTitle">결과 분석 중...</h1>
+
+        <div class="result-box" id="resultBox">
+            <span class="result-icon" id="resultIcon">⏳</span>
+        </div>
+
+        <div class="result-desc">
+            <span class="desc-title">📝 유형 특징</span>
+            <p id="resultDesc">잠시만 기다려주세요...</p>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn kakao-btn" onclick="shareResult()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3C6.477 3 2 6.646 2 11.143C2 13.985 3.799 16.48 6.514 17.925C6.355 18.529 5.867 20.375 5.808 20.668C5.703 21.189 6.273 21.464 6.648 21.143L11.96 17.03C11.973 17.03 11.987 17.03 12 17.03C17.523 17.03 22 13.384 22 8.887C22 4.39 17.523 3 12 3Z" fill="#3C1E1E"/></svg>
+                결과 공유하고 친구 반응 보기
+            </button>
+            <button class="btn retry-btn" onclick="location.href='officeintro.html'">테스트 다시하기</button>
+            <button class="btn home-btn" onclick="location.href='index.html'">다른 테스트 보러가기</button>
+        </div>
+
+        <div class="ad-area">💸 광고 영역 💸</div>
+    </div>
+
+    <script>
+        // 1. URL에서 mbti 값 가져오기 (?mbti=ESTJ)
+        const urlParams = new URLSearchParams(window.location.search);
+        const mbti = urlParams.get('mbti');
+
+        // 2. 결과 데이터 (16가지 유형 멘트)
+        const resultData = {
+            "ISTJ": { title: "한 치의 오차도 없는\n'인간 엑셀'", icon: "🤖", color: "#E3F2FD", desc: "시키는 일은 완벽하게 해내는 모범생! 하지만 융통성 없는 꼰대 소리 들을 수도? 계획이 틀어지면 스트레스 받음." },
+            "ISFJ": { title: "모두가 좋아하는\n'수호천사'", icon: "👼", color: "#FCE4EC", desc: "거절을 못 해서 일이 몰리는 타입. 뒤에서 묵묵히 챙겨주는 엄마 같은 존재. 착하다는 소리 지겹게 들음." },
+            "INFJ": { title: "속을 알 수 없는\n'미스테리 예언가'", icon: "🔮", color: "#F3E5F5", desc: "겉으로는 웃지만 속으로는 인류애 상실 중. 통찰력이 좋아서 상사 뒷담화할 때 핵심을 찌름. 조용히 강함." },
+            "INTJ": { title: "혼자서 다 해먹는\n'전략가'", icon: "♟️", color: "#E8EAF6", desc: "비효율적인 회의 극혐. '그냥 제가 할게요' 하고 혼자 하는 게 편함. 일 못하는 상사 보면 속터짐." },
+            "ISTP": { title: "효율성 끝판왕\n'만능 해결사'", icon: "🔧", color: "#ECEFF1", desc: "월급 받은 만큼만 일한다. 기계적인 리액션의 달인. 벼락치기로 일 처리하는데 결과물은 좋음." },
+            "ISFP": { title: "퇴사 짤 줍줍하는\n'소심한 예술가'", icon: "🎨", color: "#FFF3E0", desc: "누워있는 게 제일 좋음. 갈등 싫어서 그냥 내가 참고 맘. 마음속에 항상 사직서 품고 다님." },
+            "INFP": { title: "상처받은 영혼\n'쿠크다스'", icon: "🍪", color: "#FFEBEE", desc: "혼자만의 세계가 확실함. 상사 한숨 소리에도 '나 때문인가?' 하고 3박 4일 고민함. 감수성 폭발." },
+            "INTP": { title: "아이디어 뱅크\n'게으른 천재'", icon: "💡", color: "#E0F7FA", desc: "회의 시간에 멍 때리는 것 같지만 머릿속으로 우주 정복 중. 관심 없는 일은 죽어도 안 함." },
+            "ESTP": { title: "스릴을 즐기는\n'행동대장'", icon: "🏍️", color: "#FFECB3", desc: "일단 저지르고 본다. 눈치 빠르고 말빨 좋아서 영업직 최적화. 사내 정치질도 은근 잘함." },
+            "ESFP": { title: "회식 자리 센터\n'핵인싸'", icon: "🎉", color: "#FFF9C4", desc: "회사 다니는 이유: 점심시간, 탕비실 수다, 회식. 분위기 메이커지만 일할 땐 집중력 3초." },
+            "ENFP": { title: "열정 만수르\n'재기발랄 활동가'", icon: "🔥", color: "#FFCCBC", desc: "하고 싶은 건 많은데 마무리가 안 됨. 리액션 부자라 상사들이 좋아함. 감정 기복 롤러코스터." },
+            "ENTP": { title: "말싸움 절대 안 지는\n'프로 반박러'", icon: "🥊", color: "#D1C4E9", desc: "상사 말에도 '근데 그건 아니지 않나요?' 함. 아이디어는 좋은데 디테일 부족. 재밌는 거만 함." },
+            "ESTJ": { title: "젊은 꼰대\n'엄격한 관리자'", icon: "👔", color: "#BBDEFB", desc: "일 못하는 사람 이해 불가. 책임감 강하고 추진력 좋음. 본인은 꼰대 아니라고 생각함 (근데 맞음)." },
+            "ESFJ": { title: "분위기 메이커\n'사교적인 외교관'", icon: "🤝", color: "#C8E6C9", desc: "동료 생일, 경조사 다 챙김. 인정받고 싶어 함. 남 눈치 많이 봐서 피곤한 스타일." },
+            "ENFJ": { title: "다정다감한 리더\n'언변 능숙형'", icon: "🎤", color: "#FFE0B2", desc: "사람 좋아하고 말 잘함. 오지랖 넓어서 남 일까지 다 떠안음. 칭찬해주면 일 2배로 함." },
+            "ENTJ": { title: "태생부터 사장님\n'지도자'", icon: "🦁", color: "#CFD8DC", desc: "답답한 거 질색. 내가 대장 해야 직성 풀림. 일 중독자. 성공 욕구 강해서 승진 빠름." }
+        };
+
+        // 3. 화면 업데이트 기능
+        function updateResult() {
+            // 만약 mbti 값이 없거나 이상하면 기본값(ESTJ) 보여주기
+            let type = mbti ? mbti.toUpperCase() : "ESTJ"; 
+            if(!resultData[type]) type = "ESTJ";
+
+            const data = resultData[type];
+
+            document.getElementById('resultTitle').innerText = data.title;
+            document.getElementById('resultIcon').innerText = data.icon;
+            document.getElementById('resultDesc').innerText = data.desc;
+            document.getElementById('resultBox').style.backgroundColor = data.color;
+        }
+
+        // 4. 공유하기 버튼 기능 (카카오톡)
+        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d'); // 나쨩 키!
+
+        function shareResult() {
+            let type = mbti ? mbti.toUpperCase() : "ESTJ";
+            const data = resultData[type];
+
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '나의 직장인 생존 유형은?',
+                    description: data.title.replace('\n', ' ') + ' - ' + data.desc, // 제목과 설명 합쳐서 보냄
+                    imageUrl: 'https://theduck-lab.com/logo.png', // 나중에 결과별 이미지 생기면 여기 수정!
+                    link: {
+                        mobileWebUrl: window.location.href,
+                        webUrl: window.location.href,
+                    },
+                },
+                buttons: [
+                    {
+                        title: '결과 확인하기',
+                        link: {
+                            mobileWebUrl: window.location.href,
+                            webUrl: window.location.href,
+                        },
+                    },
+                ],
+            });
+        }
+
+        // 실행!
+        updateResult();
+    </script>
+</body>
+</html>
