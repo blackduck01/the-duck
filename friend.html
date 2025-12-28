@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4M3T8RY7Z3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4M3T8RY7Z3');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>찐친 판독기 테스트</title>
+    
+    <meta name="description" content="우리는 평생 갈 친구일까? 소름 돋는 우정 궁합 테스트!">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="찐친 판독기 - The Duck">
+    <meta property="og:description" content="손절각? 아니면 영혼의 단짝? 우리 사이 정밀 진단하기">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/3062/3062634.png"> <meta property="og:url" content="https://blackduck01.github.io/the-duck/friend.html">
+
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        .app-container {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 2px solid #90CAF9; /* 연한 파랑 테두리 */
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .btn {
+            width: 100%;
+            padding: 18px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 16px;
+            background-color: #E3F2FD; /* 아주 연한 파랑 */
+            color: #1565C0; /* 진한 파랑 글씨 */
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 #BBDEFB;
+        }
+        .btn:active { transform: translateY(4px); box-shadow: none; }
+        .btn:hover { background-color: #BBDEFB; }
+        
+        .progress-bar { width: 100%; height: 8px; background: #f0f0f0; border-radius: 5px; margin-bottom: 30px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #2196F3; transition: width 0.3s; } /* 파랑 게이지 */
+
+        .duck-img { font-size: 80px; margin: 20px 0; animation: shake 2s infinite; }
+        @keyframes shake { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-10deg); } 75% { transform: rotate(10deg); } }
+        
+        .box { background: #E1F5FE; padding: 22px; border-radius: 18px; margin: 15px 0; text-align: left; }
+        .tag { display: inline-block; padding: 6px 14px; background: #1976D2; color: white; border-radius: 20px; font-size: 13px; margin-bottom: 12px; font-weight: 700; }
+        .fade-in { animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const QUESTIONS = [
+            { q: "친구가 새벽 2시에 '자니?'라고 카톡을 보냈다.", a: "무슨 일 있나? 바로 전화하거나 답장한다.", b: "자거나 폰 안 봄. 아침에 일어나서 '왜?'라고 보냄." },
+            { q: "친구가 애인과 헤어지고 울면서 찾아왔다.", a: "오늘 밤 샐 각이다. 술(또는 떡볶이) 사주며 밤새 들어줌.", b: "어차피 또 만날 거잖아... 적당히 위로하고 보냄." },
+            { q: "친구가 여행 가서 인생 샷을 100장 찍어달라고 한다.", a: "오케이! 바닥에 누워서라도 인생 샷 건져줌.", b: "아 귀찮아... 대충 몇 장 찍고 '야 잘 나왔다' 함." },
+            { q: "친구가 돈을 빌려달라고 한다. (금액 10만원)", a: "계좌 불러. (언제 갚을지 안 물어봄)", b: "돈 거래는 좀... 핑계 대고 거절하거나 차용증 씀." },
+            { q: "친구가 내 뒷담화를 했다는 걸 알게 됐다.", a: "당장 전화해서 '야 너 미쳤냐?' 하고 풀거나 싸움.", b: "조용히 손절. 연락처 차단하고 인생에서 지움." },
+            { q: "맛있는 걸 먹으러 갔는데 딱 한 점 남았다.", a: "너 먹어~ (친구 입에 넣어줌)", b: "눈치 보다가 내가 잽싸게 먹음." },
+            { q: "친구가 엽기적인 표정으로 사진을 찍자고 한다.", a: "질 수 없지! 더 망가짐.", b: "나는 예쁜 척하고 친구만 망가진 거 올림." },
+            { q: "오랜만에 만난 친구가 살이 찐 것 같다.", a: "야 너 얼굴 좋아졌다? (돌려 말하거나 모른 척)", b: "와 너 살 왜 이렇게 찜? 관리 안 함? (직구)" },
+            { q: "로또 1등에 당첨됐다! 친구에게 말할까?", a: "당연하지! 같이 파티하고 선물 사줌.", b: "절대 말 안 함. (돈 빌려달라고 할까 봐 무서움)" }
+        ];
+
+        const RESULTS = [
+            { min: 0, max: 3, name: "비즈니스 파트너 오리 💼", desc: "우린 딱 적당한 거리의 '사회 친구' 사이! 서로 선을 넘지 않는 쿨한 관계네요. 깊은 고민을 나누기엔 아직 어색한가요? 조금 더 마음을 열어보세요!", item: "우정 템 맞추기 💍" },
+            { min: 4, max: 6, name: "든든한 동네 친구 오리 🚲", desc: "심심할 때 불러내면 나오는 편한 사이! 가끔 티격태격하지만 없으면 허전해요. 이 정도면 훌륭한 우정입니다. 오래오래 가세요!", item: "치맥 파티 🍗" },
+            { min: 7, max: 9, name: "영혼의 단짝 소울메이트 💎", desc: "눈빛만 봐도 통하는 가족 같은 사이! 내 치부까지 다 보여줄 수 있는 진짜 친구네요. 전생에 부부가 아니었을까요? 놓치지 마세요!", item: "우정 여행 떠나기 ✈️" }
+        ];
+
+        function App() {
+            const [step, setStep] = useState(0);
+            const [score, setScore] = useState(0);
+
+            const handleAnswer = (idx) => {
+                // A(의리형)를 선택하면 점수 +1
+                if (idx === 0) setScore(prev => prev + 1);
+
+                if (step < QUESTIONS.length) {
+                    setStep(prev => prev + 1);
+                } else {
+                    setStep(QUESTIONS.length + 1); 
+                    setTimeout(() => setStep(QUESTIONS.length + 2), 3000); 
+                }
+            };
+
+            const getResult = () => {
+                return RESULTS.find(r => score >= r.min && score <= r.max);
+            };
+
+            return (
+                <div className="app-container fade-in">
+                    <div className="ad-banner">💰 상단 광고 영역 💰</div>
+
+                    {step === 0 && (
+                        <div>
+                            <div className="tag">Best Friend</div>
+                            <h1>찐친 판독기<br/>우정 테스트</h1>
+                            <div className="duck-img">👯‍♀️</div>
+                            <p>우리는 평생 갈 친구일까?<br/>소름 돋는 우정 궁합!</p>
+                            <button className="btn" onClick={() => setStep(1)}>진단 시작하기</button>
+                            <button className="btn" style={{background:'white', border:'1px solid #90CAF9'}} onClick={() => location.href='index.html'}>메인으로 가기</button>
+                        </div>
+                    )}
+                    
+                    {step >= 1 && step <= QUESTIONS.length && (
+                        <div>
+                            <div className="progress-bar"><div className="progress-fill" style={{width: `${(step/QUESTIONS.length)*100}%`}}></div></div>
+                            <div className="tag">Q{step}</div>
+                            <h2>{QUESTIONS[step-1].q}</h2>
+                            <button className="btn" style={{background:'white', border:'1px solid #eee', color:'#555'}} onClick={() => handleAnswer(0)}>{QUESTIONS[step-1].a}</button>
+                            <button className="btn" style={{background:'white', border:'1px solid #eee', color:'#555'}} onClick={() => handleAnswer(1)}>{QUESTIONS[step-1].b}</button>
+                        </div>
+                    )}
+
+                    {step === QUESTIONS.length + 1 && (
+                        <div className="fade-in">
+                            <div className="duck-img">🔮</div>
+                            <h2>우정 레벨 측정 중...</h2>
+                            <p>결과가 나오면 싸우지 마세요!</p>
+                            <div className="ad-banner" style={{height:'200px'}}>💰 전면 광고 영역 💰</div>
+                        </div>
+                    )}
+
+                    {step === QUESTIONS.length + 2 && (
+                        <div>
+                            <div className="tag">우리의 우정은</div>
+                            <div className="duck-img">💖</div>
+                            <h1>{getResult().name}</h1>
+                            <div className="box">
+                                <p>{getResult().desc}</p>
+                                <hr style={{opacity:0.2}}/>
+                                <small>추천 활동: <b>{getResult().item}</b></small>
+                            </div>
+                            <button className="btn" onClick={() => window.location.reload()}>다시 하기</button>
+                            <button className="btn" style={{background:'white', border:'1px solid #90CAF9'}} onClick={() => location.href='index.html'}>다른 테스트 하러 가기</button>
+                            <div className="ad-banner">💰 하단 광고 영역 💰</div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
