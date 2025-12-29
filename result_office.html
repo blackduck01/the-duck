@@ -4,40 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>직장인 생존 유형 테스트 결과 | The Duck Lab</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦆</text></svg>">
+    
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9076819245720802" crossorigin="anonymous"></script>
 
     <style>
-        /* 기본 세팅 */
         body { font-family: 'Pretendard', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; color: #333; }
         .container { width: 100%; max-width: 600px; background: white; min-height: 100vh; padding: 30px 20px; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; align-items: center; }
-        
-        /* 결과 타이틀 */
         .result-subtitle { color: #666; font-size: 1rem; margin-bottom: 10px; font-weight: bold; }
         .result-title { font-size: 1.8rem; font-weight: 900; margin: 0 0 30px 0; color: #222; word-break: keep-all; }
-
-        /* 결과 메인 박스 */
         .result-box { width: 100%; max-width: 350px; padding: 40px 20px; background-color: #E3F2FD; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .result-icon { font-size: 5rem; margin-bottom: 20px; display: block; }
-        
-        /* 설명글 */
         .result-desc { background: #f9f9f9; padding: 20px; border-radius: 12px; text-align: left; line-height: 1.6; font-size: 0.95rem; margin-bottom: 30px; width: 100%; box-sizing: border-box; color: #444; }
         .desc-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; display: block; color: #333; }
-
-        /* 👇 [NEW] 궁합 박스 스타일 (여기가 핵심!) */
+        
         .match-container { display: flex; gap: 10px; width: 100%; margin-bottom: 30px; }
         .match-box { flex: 1; padding: 15px; border-radius: 12px; text-align: center; }
         .match-good { background-color: #E8F5E9; border: 1px solid #C8E6C9; }
         .match-bad { background-color: #FFEBEE; border: 1px solid #FFCDD2; }
         .match-title { display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color: #555; }
         .match-type { font-weight: 900; font-size: 1.1rem; color: #222; }
-        .match-desc { font-size: 0.75rem; color: #777; margin-top: 3px; display: block; }
 
-        /* 버튼들 */
         .btn-group { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
         .btn { padding: 18px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; border: none; width: 100%; transition: transform 0.1s; }
         .btn:active { transform: scale(0.98); }
-        .kakao-btn { background-color: #FEE500; color: #3c1e1e; }
+        .kakao-btn { background-color: #FEE500; color: #3c1e1e; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .copy-btn { background-color: #eee; color: #333; border: 1px solid #ddd; }
         .retry-btn { background-color: #333; color: white; }
         .home-btn { background-color: white; border: 2px solid #eee; color: #666; }
 
@@ -48,11 +41,7 @@
     <div class="container">
         <p class="result-subtitle">나의 직장인 생존 유형은?</p>
         <h1 class="result-title" id="resultTitle">결과 분석 중...</h1>
-
-        <div class="result-box" id="resultBox">
-            <span class="result-icon" id="resultIcon">⏳</span>
-        </div>
-
+        <div class="result-box" id="resultBox"><span class="result-icon" id="resultIcon">⏳</span></div>
         <div class="result-desc">
             <span class="desc-title">📝 유형 특징</span>
             <p id="resultDesc">잠시만 기다려주세요...</p>
@@ -70,19 +59,19 @@
         </div>
 
         <div class="btn-group">
-            <button class="btn kakao-btn" onclick="shareResult()">카카오톡 공유하기</button>
+            <button class="btn kakao-btn" onclick="shareResult()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3C6.477 3 2 6.646 2 11.143C2 13.985 3.799 16.48 6.514 17.925C6.355 18.529 5.867 20.375 5.808 20.668C5.703 21.189 6.273 21.464 6.648 21.143L11.96 17.03C11.973 17.03 11.987 17.03 12 17.03C17.523 17.03 22 13.384 22 8.887C22 4.39 17.523 3 12 3Z" fill="#3C1E1E"/></svg>
+                카카오톡 공유하기
+            </button>
+            <button class="btn copy-btn" onclick="copyLink()">🔗 링크 복사하기</button>
             <button class="btn retry-btn" onclick="location.href='officeintro.html'">테스트 다시하기</button>
             <button class="btn home-btn" onclick="location.href='index.html'">다른 테스트 보러가기</button>
         </div>
-
         <div class="ad-area">💸 광고 영역 💸</div>
     </div>
-
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const mbti = urlParams.get('mbti');
-
-        // 👇 데이터에 best(잘 맞는), worst(안 맞는) 유형 추가함!
         const resultData = {
             "ISTJ": { title: "한 치의 오차도 없는\n'인간 엑셀'", icon: "🤖", color: "#E3F2FD", desc: "시키는 일은 완벽하게 해내는 모범생! 융통성 없다는 소리 좀 듣지만, 일 처리는 확실함.", best: "ESFP", worst: "ENFP" },
             "ISFJ": { title: "모두가 좋아하는\n'수호천사'", icon: "👼", color: "#FCE4EC", desc: "거절을 못 해서 일이 몰리는 타입. 뒤에서 묵묵히 챙겨주는 엄마 같은 존재.", best: "ESFP", worst: "ENTP" },
@@ -101,30 +90,21 @@
             "ENFJ": { title: "다정다감한 리더\n'언변가'", icon: "🎤", color: "#FFE0B2", desc: "사람 좋아하고 말 잘함. 오지랖 넓어서 남 일까지 다 떠안음.", best: "INFP", worst: "ISTP" },
             "ENTJ": { title: "태생부터 사장님\n'지도자'", icon: "🦁", color: "#CFD8DC", desc: "답답한 거 질색. 내가 대장 해야 직성 풀림. 일 중독자.", best: "INTP", worst: "ISFP" }
         };
-
-        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d'); // 키 확인!
-
+        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d'); 
         function updateResult() {
             let type = mbti ? mbti.toUpperCase() : "ESTJ"; 
             if(!resultData[type]) type = "ESTJ";
-
             const data = resultData[type];
-
             document.getElementById('resultTitle').innerText = data.title;
             document.getElementById('resultIcon').innerText = data.icon;
             document.getElementById('resultDesc').innerText = data.desc;
             document.getElementById('resultBox').style.backgroundColor = data.color;
-
-            // 👇 [NEW] 궁합 데이터 넣기
             document.getElementById('bestMatch').innerText = data.best;
             document.getElementById('worstMatch').innerText = data.worst;
         }
-
         function shareResult() {
             let type = mbti ? mbti.toUpperCase() : "ESTJ";
             const data = resultData[type];
-            
-            // 공유 멘트에 궁합 정보도 슬쩍 넣으면 더 좋음!
             Kakao.Share.sendDefault({
                 objectType: 'feed',
                 content: {
@@ -136,7 +116,15 @@
                 buttons: [{ title: '결과 확인하기', link: { mobileWebUrl: window.location.href, webUrl: window.location.href } }]
             });
         }
-
+        // 👇 링크 복사 기능
+        function copyLink() {
+            var url = window.location.href;
+            navigator.clipboard.writeText(url).then(function() {
+                alert("링크가 복사되었어요! \n친구들에게 붙여넣기(Ctrl+V) 하세요! 🦆");
+            }).catch(function() {
+                alert("복사에 실패했어요 ㅠ URL을 직접 복사해주세요.");
+            });
+        }
         updateResult();
     </script>
 </body>
