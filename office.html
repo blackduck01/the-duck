@@ -4,199 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>직장인 생존 유형 테스트 | The Duck Lab</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦆</text></svg>">
     <style>
-        /* 🎨 스타일 정의 */
         body { font-family: 'Pretendard', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         .container { width: 100%; max-width: 600px; background: white; height: 100vh; display: flex; flex-direction: column; position: relative; }
-        
-        /* 1. 상단 진행 바 */
         .progress-container { width: 100%; height: 6px; background-color: #eee; }
-        .progress-bar { height: 100%; background-color: #FFD700; width: 0%; transition: width 0.3s; }
+        .progress-bar { height: 100%; background-color: #3b82f6; width: 0%; transition: width 0.3s; }
         .page-count { text-align: right; font-size: 0.8rem; color: #999; padding: 10px 20px 0; font-weight: bold; }
-
-        /* 2. 질문 영역 */
         .question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 30px; text-align: center; }
         .q-title { font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; line-height: 1.4; color: #333; word-break: keep-all; }
         .q-emoji { font-size: 4rem; margin-bottom: 30px; }
-
-        /* 3. 답변 버튼 영역 */
         .answer-area { padding: 0 20px 50px; display: flex; flex-direction: column; gap: 15px; }
-        .btn { 
-            width: 100%; 
-            padding: 20px; 
-            border: 2px solid #f1f1f1; 
-            background: #fff; 
-            border-radius: 16px; 
-            font-size: 1rem; 
-            font-weight: 600; 
-            cursor: pointer; 
-            color: #444; 
-            transition: all 0.1s; 
-            text-align: center;
-            line-height: 1.4;
-        }
-        .btn:hover { background-color: #FFF9C4; border-color: #FFD700; color: #333; }
-        .btn:active { transform: scale(0.98); background-color: #FFD700; border-color: #FFD700; }
+        .btn { width: 100%; padding: 20px; border: 2px solid #f1f1f1; background: #fff; border-radius: 16px; font-size: 1rem; font-weight: 600; cursor: pointer; color: #444; transition: all 0.1s; text-align: center; line-height: 1.4; }
+        .btn:hover { background-color: #E3F2FD; border-color: #2196F3; color: #1565C0; }
+        .btn:active { transform: scale(0.98); background-color: #2196F3; border-color: #2196F3; color: white; }
+
+        /* 👇 로딩 화면 스타일 추가 */
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+        .loading-spinner { font-size: 3rem; animation: spin 1s infinite linear; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">🦆</div>
+        <h2 style="margin-top: 20px; color: #333;">결과 분석 중...</h2>
+        <p style="color: #666;">오리가 열심히 계산하고 있어요! 📝</p>
+    </div>
+
     <div class="container">
         <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
         <div class="page-count"><span id="currentNum">1</span> / 12</div>
-
         <div class="question-area">
             <div class="q-emoji" id="qEmoji">👀</div>
-            <div class="q-title" id="qTitle">문제 로딩 중...</div>
+            <div class="q-title" id="qTitle">로딩 중...</div>
         </div>
-
         <div class="answer-area">
-            <button class="btn" id="btnA" onclick="selectAnswer('A')">답변 A</button>
-            <button class="btn" id="btnB" onclick="selectAnswer('B')">답변 B</button>
+            <button class="btn" id="btnA" onclick="selectAnswer('A')">A</button>
+            <button class="btn" id="btnB" onclick="selectAnswer('B')">B</button>
         </div>
     </div>
-
     <script>
-        // 🧐 [질문 데이터] 직장인 생존 유형 (12문제)
-        // type: EI(에너지), SN(인식), TF(판단), JP(생활)
         const qnaList = [
-            {
-                q: "출근길 엘리베이터 앞,\n저 멀리 팀장님이 보인다!",
-                emoji: "🏢",
-                a: { text: "헉.. (못 본 척 핸드폰을 보며 다음 걸 탄다)", type: "I" },
-                b: { text: "팀장님!! (반갑게? 인사하며 같이 탄다)", type: "E" }
-            },
-            {
-                q: "점심시간, 오늘따라 메뉴가\n도저히 결정되지 않는다.",
-                emoji: "🍽️",
-                a: { text: "누가 정해주겠지... 대세에 따른다.", type: "J" }, // 수동적/안정 (J or S쪽 해석 가능하지만 여기선 P/J패턴으로) -> 수정: 유연함(P) vs 계획(J) 보단 주도성. 일단 P로 두거나 상황 맞춰 조정. 
-                // MBTI 정석 질문으로 수정:
-                // J: 계획대로 / P: 즉흥적으로
-                // S: 현실적 / N: 상상력
-                // T: 논리 / F: 공감
-                // 다시 세팅!
-                b: { text: "그냥 눈에 보이는 식당 아무데나 들어간다.", type: "P" }
-            },
-            {
-                q: "업무 중 실수를 발견했다!\n식은땀이 흐르는데...",
-                emoji: "💦",
-                a: { text: "일단 수습부터 하고 나중에 보고한다.", type: "T" },
-                b: { text: "어떡하지? 옆자리 동료한테 털어놓는다.", type: "F" }
-            },
-            {
-                q: "회의 시간, 새로운 아이디어를\n내보라는 지시가 떨어졌다.",
-                emoji: "💡",
-                a: { text: "현실적으로 가능한 방법부터 찾는다.", type: "S" },
-                b: { text: "일단 기발하고 획기적인 상상을 해본다.", type: "N" }
-            },
-            {
-                q: "주말에 회사 워크샵을 간다고 한다.\n나의 속마음은?",
-                emoji: "🚌",
-                a: { text: "아... 내 주말... (기가 빨린다)", type: "I" },
-                b: { text: "오? 술 마시고 놀겠네? (살짝 설렘)", type: "E" }
-            },
-            {
-                q: "상사가 두루뭉술하게\n'이것 좀 잘 처리해줘'라고 했다.",
-                emoji: "🤔",
-                a: { text: "센스 있게 알아서 처리한다. (융통성)", type: "N" },
-                b: { text: "정확한 가이드라인을 다시 물어본다.", type: "S" }
-            },
-            {
-                q: "동료가 상사에게 깨지고\n우울해하고 있다.",
-                emoji: "😭",
-                a: { text: "무슨 일이야? 많이 힘들었겠다.. (공감)", type: "F" },
-                b: { text: "김부장이 원래 그래. 신경 쓰지 마. (해결)", type: "T" }
-            },
-            {
-                q: "내일 연차를 썼다!\n오늘 나의 퇴근 준비는?",
-                emoji: "✈️",
-                a: { text: "내일 할 일까지 완벽하게 세팅해놓고 간다.", type: "J" },
-                b: { text: "일단 끄고 튀어! 내일 일은 내일 생각하자.", type: "P" }
-            },
-             {
-                q: "회사 단톡방에 공지가 올라왔다.\n사람들의 반응이 없다.",
-                emoji: "📱",
-                a: { text: "내가라도 '네 알겠습니다~' 하고 올린다.", type: "E" },
-                b: { text: "누가 읽었나 숫자만 확인하고 있는다.", type: "I" }
-            },
-            {
-                q: "점심 먹고 카페,\n신메뉴가 나왔다!",
-                emoji: "☕",
-                a: { text: "먹던 거 먹자. (아아 주세요)", type: "S" },
-                b: { text: "오 저거 뭐지? 도전해본다.", type: "N" }
-            },
-            {
-                q: "팀장님이 '요즘 힘든 거 없나?'\n하며 면담을 요청했다.",
-                emoji: "💬",
-                a: { text: "감정적인 고충을 솔직하게 털어놓는다.", type: "F" },
-                b: { text: "업무적인 애로사항 위주로 이야기한다.", type: "T" }
-            },
-            {
-                q: "갑자기 1시간 뒤에\n긴급 회의가 잡혔다!",
-                emoji: "🚨",
-                a: { text: "하던 일 멈추고 자료 준비부터 한다. (계획)", type: "J" },
-                b: { text: "일단 가보지 뭐. 가서 생각한다. (임기응변)", type: "P" }
-            }
+            { q: "출근길 지옥철/버스 안,\n나의 머릿속은?", emoji: "🚌", a: { text: "아.. 사람 너무 많아.. 기 빨려.. (멍-)", type: "I" }, b: { text: "오늘 점심 뭐 먹지? 주말에 뭐 하지? (생각 폭발)", type: "E" } },
+            { q: "새로운 프로젝트 회의 시간,\n나의 스타일은?", emoji: "🗣️", a: { text: "일단 듣고 나중에 정리해서 말한다.", type: "I" }, b: { text: "떠오르는 아이디어를 바로바로 말한다.", type: "E" } },
+            { q: "업무 중 모르는 게 생겼다!\n나는 어떻게 할까?", emoji: "🤔", a: { text: "혼자 구글링해서 끝까지 찾아본다.", type: "I" }, b: { text: "옆 자리 동료나 상사에게 바로 물어본다.", type: "E" } },
+            { q: "보고서를 작성할 때\n더 신경 쓰는 부분은?", emoji: "📑", a: { text: "구체적인 수치, 데이터, 사실 확인", type: "S" }, b: { text: "전체적인 흐름, 비전, 기획 의도", type: "N" } },
+            { q: "상사가 '그냥 대충 해와'라고 했다.\n나의 반응은?", emoji: "🤷", a: { text: "대충이 어느 정도지? (기준이 모호해서 답답)", type: "S" }, b: { text: "오케이~ 느낌 아니까~ (적당히 해서 냄)", type: "N" } },
+            { q: "점심 메뉴를 고를 때\n나는?", emoji: "🍱", a: { text: "늘 가던 맛집, 실패 없는 메뉴 선택", type: "S" }, b: { text: "새로 생긴 식당? 도전해볼까?", type: "N" } },
+            { q: "동료가 업무 실수를 해서\n우울해하고 있다.", emoji: "😢", a: { text: "어디서 틀렸어? 같이 수습하자. (해결책)", type: "T" }, b: { text: "헐 어떡해.. 많이 놀랐지? ㅠㅠ (공감)", type: "F" } },
+            { q: "상사에게 깨지고 왔을 때\n듣고 싶은 위로는?", emoji: "💔", a: { text: "김대리가 잘못한 거 없는데? 상사가 이상함. (팩트)", type: "T" }, b: { text: "오늘 진짜 고생했다.. 술 한잔 할까? (마음)", type: "F" } },
+            { q: "회의 중 의견 충돌이 발생했다.\n나는?", emoji: "⚡", a: { text: "논리적으로 누가 맞는지 따져본다.", type: "T" }, b: { text: "서로 기분 상하지 않게 좋게 넘어간다.", type: "F" } },
+            { q: "휴가 계획을 세울 때\n나는?", emoji: "✈️", a: { text: "분 단위 엑셀 계획표 작성 (맛집, 동선 포함)", type: "J" }, b: { text: "비행기 표만 끊고 일단 간다 (가서 생각함)", type: "P" } },
+            { q: "책상 위 상태는?", emoji: "🖥️", a: { text: "파일, 필기구 각 잡혀 있음 (깔끔)", type: "J" }, b: { text: "어디에 뭐 있는지만 알면 됨 (카오스)", type: "P" } },
+            { q: "갑자기 긴급 회의가 잡혔다!\n나의 심정은?", emoji: "🚨", a: { text: "아.. 내 계획 다 틀어졌네.. (스트레스)", type: "J" }, b: { text: "오 뭐지? 무슨 일이지? (그러려니 함)", type: "P" } }
         ];
-
-        // 점수 저장용 (MBTI)
         let score = { E:0, I:0, S:0, N:0, T:0, F:0, J:0, P:0 };
         let currentStep = 0;
-
         const progressBar = document.getElementById('progressBar');
         const currentNum = document.getElementById('currentNum');
         const qTitle = document.getElementById('qTitle');
         const qEmoji = document.getElementById('qEmoji');
         const btnA = document.getElementById('btnA');
         const btnB = document.getElementById('btnB');
-
-        // 초기 실행
+        
         setQuestion();
-
-        // 화면 세팅 함수
         function setQuestion() {
             let q = qnaList[currentStep];
-            
-            // 진행 바 업데이트
             let percent = (currentStep / 12) * 100;
             progressBar.style.width = percent + '%';
             currentNum.innerText = currentStep + 1;
-
-            // 질문 및 버튼 텍스트 변경
             qEmoji.innerText = q.emoji;
             qTitle.innerText = q.q;
             btnA.innerText = q.a.text;
             btnB.innerText = q.b.text;
         }
-
-        // 답변 선택 시 실행 함수
         function selectAnswer(choice) {
             let q = qnaList[currentStep];
             let type = (choice === 'A') ? q.a.type : q.b.type;
-            
-            // 점수 추가
             score[type]++;
-
-            // 다음 문제로
             currentStep++;
-            
-            if(currentStep < 12) {
-                setQuestion();
-            } else {
-                goResult();
-            }
+            if(currentStep < 12) { setQuestion(); } else { goResult(); }
         }
-
-        // 결과 계산 및 이동
+        
+        // 👇 로딩 후 결과 페이지 이동 로직
         function goResult() {
-            // MBTI 조합 계산
+            // 1. 로딩 화면 켜기
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            // 2. MBTI 계산
             let mbti = "";
             mbti += (score.E > score.I) ? "E" : "I";
             mbti += (score.S > score.N) ? "S" : "N";
             mbti += (score.T > score.F) ? "T" : "F";
             mbti += (score.J > score.P) ? "J" : "P";
 
-            // 결과 페이지로 이동 (쿼리스트링으로 mbti 전달)
-            location.href = `result_office.html?mbti=${mbti}`;
+            // 3. 2.5초 뒤에 이동 (쫄깃한 맛!)
+            setTimeout(function() {
+                location.href = `result_office.html?mbti=${mbti}`; 
+            }, 2500);
         }
     </script>
 </body>
