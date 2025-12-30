@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>직장인 생존 유형 테스트 | The Duck Lab</title>
+    <style>
+        body { font-family: 'Pretendard', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 600px; background: white; height: 100vh; display: flex; flex-direction: column; position: relative; }
+        .progress-container { width: 100%; height: 6px; background-color: #eee; }
+        .progress-bar { height: 100%; background-color: #2196F3; width: 0%; transition: width 0.3s; } 
+        .page-count { text-align: right; font-size: 0.8rem; color: #999; padding: 10px 20px 0; font-weight: bold; }
+        .question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 30px; text-align: center; }
+        .q-title { font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; line-height: 1.4; color: #333; word-break: keep-all; }
+        .q-emoji { font-size: 4rem; margin-bottom: 30px; }
+        .answer-area { padding: 0 20px 50px; display: flex; flex-direction: column; gap: 15px; }
+        .btn { width: 100%; padding: 20px; border: 2px solid #f1f1f1; background: #fff; border-radius: 16px; font-size: 1rem; font-weight: 600; cursor: pointer; color: #444; transition: all 0.1s; text-align: center; line-height: 1.4; }
+        .btn:hover { background-color: #E3F2FD; border-color: #2196F3; color: #1565C0; }
+        .btn:active { transform: scale(0.98); background-color: #2196F3; border-color: #2196F3; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="page-count"><span id="currentNum">1</span> / 12</div>
+        <div class="question-area">
+            <div class="q-emoji" id="qEmoji">👀</div>
+            <div class="q-title" id="qTitle">로딩 중...</div>
+        </div>
+        <div class="answer-area">
+            <button class="btn" id="btnA" onclick="selectAnswer('A')">A</button>
+            <button class="btn" id="btnB" onclick="selectAnswer('B')">B</button>
+        </div>
+    </div>
+    <script>
+        const qnaList = [
+            { q: "점심시간이다.\n나의 이상적인 점심 루틴은?", emoji: "🍚", a: { text: "동료들이랑 맛집 가서 수다 떨면서 먹기", type: "E" }, b: { text: "이어폰 꽂고 혼자 조용히 유튜브 보며 먹기", type: "I" } },
+            { q: "엘리베이터 탔는데\n어색한 타부서 팀장님과 단둘이 남았다.", emoji: "🏢", a: { text: "\"식사는 하셨어요?\" (스몰토크 시도)", type: "E" }, b: { text: "(핸드폰 보는 척하며 층수만 쳐다봄)", type: "I" } },
+            { q: "회식 자리,\n분위기가 무르익었다.", emoji: "🍻", a: { text: "2차 가시죠! (내가 주도하거나 끝까지 남음)", type: "E" }, b: { text: "눈치 보다가 조용히 가방 챙겨서 사라짐", type: "I" } },
+            { q: "새로운 프로젝트 회의,\n아이디어를 내보라고 한다.", emoji: "💡", a: { text: "과거 성공 사례와 데이터 위주로 제안함", type: "S" }, b: { text: "\"이런 거 어때요?\" 파격적이고 새로운 컨셉 제안", type: "N" } },
+            { q: "상사가 \"이거 대충 이렇게 해줘\"라고\n추상적으로 지시했다.", emoji: "🤯", a: { text: "스트레스 받음. \"정확한 양식이 뭐죠?\" 되묻는다.", type: "S" }, b: { text: "찰떡같이 알아듣고 내 스타일대로 채워서 간다.", type: "N" } },
+            { q: "로또 1등에 당첨되어\n회사를 그만두는 상상?", emoji: "💸", a: { text: "세금 떼고 얼마인지, 어디에 예금할지 계산함", type: "S" }, b: { text: "부장님 책상에 사직서 던지는 장면부터 시뮬레이션", type: "N" } },
+            { q: "동료가 큰 실수를 해서\n시말서를 쓰고 있다.", emoji: "📝", a: { text: "\"어떻게 수습할 거야?\" (해결책부터 생각)", type: "T" }, b: { text: "\"괜찮아? 많이 깨졌어?\" (멘탈부터 챙겨줌)", type: "F" } },
+            { q: "내가 업무 성과를 냈을 때\n듣고 싶은 칭찬은?", emoji: "👏", a: { text: "\"역시 능력 있네. 이번 보너스 챙겨줄게.\"", type: "T" }, b: { text: "\"진짜 고생 많았어! 너 덕분에 팀 분위기 살았다.\"", type: "F" } },
+            { q: "후배가 \"저 너무 힘들어서 못하겠어요\"라고\n상담을 요청했다.", emoji: "😭", a: { text: "뭐가 힘든데? 업무 프로세스를 조정해 줄까?", type: "T" }, b: { text: "많이 힘들었구나 ㅠㅠ 술 한잔할까?", type: "F" } },
+            { q: "내일 오전까지 마감인 보고서,\n현재 나의 상태는?", emoji: "⏰", a: { text: "이미 3일 전에 초안 끝내고 검토 중임", type: "J" }, b: { text: "발등에 불 떨어짐. 오늘 야근각이다.", type: "P" } },
+            { q: "퇴근 10분 전,\n갑자기 급한 업무가 들어왔다.", emoji: "🔥", a: { text: "내일 일정에 추가해두고 칼퇴한다.", type: "J" }, b: { text: "아 찝찝해.. 그냥 후딱 처리하고 간다.", type: "P" } },
+            { q: "책상 정리 스타일은?", emoji: "🧹", a: { text: "필기구, 서류 위치가 딱딱 정해져 있음", type: "J" }, b: { text: "카오스 그 자체지만 어디에 뭐 있는지는 앎", type: "P" } }
+        ];
+
+        let score = { E:0, I:0, S:0, N:0, T:0, F:0, J:0, P:0 };
+        let currentStep = 0;
+        const progressBar = document.getElementById('progressBar');
+        const currentNum = document.getElementById('currentNum');
+        const qTitle = document.getElementById('qTitle');
+        const qEmoji = document.getElementById('qEmoji');
+        const btnA = document.getElementById('btnA');
+        const btnB = document.getElementById('btnB');
+
+        setQuestion();
+
+        function setQuestion() {
+            let q = qnaList[currentStep];
+            let percent = (currentStep / 12) * 100;
+            progressBar.style.width = percent + '%';
+            currentNum.innerText = currentStep + 1;
+            qEmoji.innerText = q.emoji;
+            qTitle.innerText = q.q;
+            btnA.innerText = q.a.text;
+            btnB.innerText = q.b.text;
+        }
+
+        function selectAnswer(choice) {
+            let q = qnaList[currentStep];
+            let type = (choice === 'A') ? q.a.type : q.b.type;
+            score[type]++;
+            currentStep++;
+            if(currentStep < 12) { 
+                setQuestion(); 
+            } else { 
+                goResult(); 
+            }
+        }
+
+        function goResult() {
+            let mbti = "";
+            mbti += (score.E > score.I) ? "E" : "I";
+            mbti += (score.S > score.N) ? "S" : "N";
+            mbti += (score.T > score.F) ? "T" : "F";
+            mbti += (score.J > score.P) ? "J" : "P";
+            
+            // 여기가 바뀐 부분: result_job.html로 이동
+            location.href = `result_job.html?mbti=${mbti}`;
+        }
+    </script>
+</body>
+</html>
