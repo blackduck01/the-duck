@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>귀차니즘 레벨 결과 | The Duck Lab</title>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9076819245720802" crossorigin="anonymous"></script>
+    <style>
+        body { font-family: 'Pretendard', sans-serif; background-color: #f5f5f5; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; color: #333; }
+        .container { width: 100%; max-width: 600px; background: white; min-height: 100vh; padding: 30px 20px; box-sizing: border-box; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        
+        .result-subtitle { color: #673AB7; font-size: 1rem; margin-bottom: 10px; font-weight: bold; }
+        .result-title { font-size: 1.8rem; font-weight: 900; margin: 0 0 30px 0; color: #222; word-break: keep-all; }
+        
+        .result-box { width: 100%; max-width: 350px; padding: 40px 20px; background-color: #EDE7F6; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .result-icon { font-size: 5rem; margin-bottom: 20px; display: block; }
+        
+        .result-desc { background: #F3E5F5; padding: 20px; border-radius: 12px; text-align: left; line-height: 1.6; font-size: 0.95rem; margin-bottom: 30px; width: 100%; box-sizing: border-box; color: #444; border: 1px solid #D1C4E9; }
+        .desc-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; display: block; color: #512DA8; }
+        
+        .match-container { display: flex; gap: 10px; width: 100%; margin-bottom: 30px; }
+        .match-box { flex: 1; padding: 15px; border-radius: 12px; text-align: center; }
+        .match-good { background-color: #EDE7F6; border: 1px solid #D1C4E9; }
+        .match-bad { background-color: #ECEFF1; border: 1px solid #CFD8DC; }
+        .match-title { display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color: #555; }
+        .match-type { font-weight: 900; font-size: 1.1rem; color: #222; }
+
+        .btn-group { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .btn { padding: 18px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; border: none; width: 100%; transition: transform 0.1s; }
+        .btn:active { transform: scale(0.98); }
+        .kakao-btn { background-color: #FEE500; color: #3c1e1e; }
+        .retry-btn { background-color: #333; color: white; }
+        .home-btn { background-color: white; border: 2px solid #eee; color: #666; }
+        .ad-area { width: 100%; background: #fafafa; border: 1px dashed #ddd; padding: 20px; border-radius: 12px; box-sizing: border-box; margin-bottom: 20px; color: #ccc; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="result-subtitle">나의 게으름 등급은?</p>
+        <h1 class="result-title" id="resultTitle">결과 분석 중...</h1>
+        <div class="result-box" id="resultBox"><span class="result-icon" id="resultIcon">💤</span></div>
+        <div class="result-desc">
+            <span class="desc-title">🛌 귀차니즘 특징</span>
+            <p id="resultDesc">잠시만 기다려주세요...</p>
+        </div>
+
+        <div class="match-container">
+            <div class="match-box match-good">
+                <span class="match-title">뒹굴 메이트 (천생연분)</span>
+                <span class="match-type" id="bestMatch">???</span>
+            </div>
+            <div class="match-box match-bad">
+                <span class="match-title">날 피곤하게 함 (상극)</span>
+                <span class="match-type" id="worstMatch">???</span>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn kakao-btn" onclick="shareResult()">카카오톡 공유하기</button>
+            <button class="btn retry-btn" onclick="location.href='lazyintro.html'">테스트 다시하기</button>
+            <button class="btn home-btn" onclick="location.href='index.html'">다른 테스트 보러가기</button>
+        </div>
+        <div class="ad-area">💸 광고 영역 💸</div>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const mbti = urlParams.get('mbti');
+
+        const resultData = {
+            "ISTJ": { title: "계획적인 집순이\n'효율적 게으름'", icon: "📅", desc: "누워있지만 머릿속은 바쁨. '3시까지만 눕고 청소해야지'라고 계획 세움. 귀찮아도 할 건 다 하고 눕는 스타일.", best: "ESFP", worst: "ENFP" },
+            "ISFJ": { title: "침대와 물아일체\n'이불 밖은 위험해'", icon: "🛌", desc: "약속 취소되면 겉으론 아쉬워하는데 속으론 축제 열림. 침대 위에서 밥 먹고 넷플릭스 보고 다 함.", best: "ESFP", worst: "ENTP" },
+            "INFJ": { title: "속세와 단절된\n'자발적 아싸'", icon: "🧘", desc: "혼자만의 충전 시간이 필수. 연락 안 되면 자는 거 아니고 혼자 있고 싶은 거임. 생각하느라 바쁨.", best: "ENTP", worst: "ESTP" },
+            "INTJ": { title: "숨 쉬는 것도 전략\n'에너지 절전 모드'", icon: "🔋", desc: "불필요한 움직임을 극도로 싫어함. 동선 최소화의 달인. 귀찮은 사람 만나는 게 제일 싫음.", best: "ENFP", worst: "ESFP" },
+            "ISTP": { title: "귀차니즘 만렙\n'인간 나무늘보'", icon: "🦥", desc: "만사가 귀찮음. 씻는 게 세상에서 제일 큰 일임. 배달 음식 용기 치우기 귀찮아서 안 시켜 먹을 때도 있음.", best: "ESFJ", worst: "ENFJ" },
+            "ISFP": { title: "누워 있는 게 특기\n'침대 지박령'", icon: "🛋️", desc: "하루 종일 누워있어도 허리 안 아픔. 약속 나가기 직전까지 '가지 말까?' 500번 고민함.", best: "ESTJ", worst: "ENTJ" },
+            "INFP": { title: "꿈속을 헤매는\n'몽상가 게으름뱅이'", icon: "☁️", desc: "현실 도피성 수면을 즐김. 해야 할 일 쌓여있는데 외면하고 유튜브 봄. 그리고 자책함.", best: "ENFJ", worst: "ESTJ" },
+            "INTP": { title: "생각만 하고 안 함\n'뇌만 바쁜 오리'", icon: "🧠", desc: "아이디어는 많은데 몸이 안 움직임. 밥 먹는 것도 귀찮아서 영양제로 때우고 싶어 함.", best: "ENTJ", worst: "ESFJ" },
+            "ESTP": { title: "심심한 건 못 참아\n'가짜 게으름'", icon: "⚡", desc: "집에 있으면 몸이 근질거림. 눕방 보다는 나가서 노는 게 휴식임. 미루기의 천재지만 닥치면 다 함.", best: "ISFJ", worst: "INFJ" },
+            "ESFP": { title: "눕는 게 뭐죠?\n'에너자이저'", icon: "💃", desc: "집에 혼자 있으면 우울해짐. 친구 만나서 떠들어야 충전됨. 귀차니즘? 그게 뭐임?", best: "ISTJ", worst: "INTJ" },
+            "ENFP": { title: "변덕스러운 뽀로로\n'노는 게 제일 좋아'", icon: "🐧", desc: "청소하다가 옛날 사진 발견해서 2시간 동안 구경함. 집중력 0. 해야 할 일 까먹고 놈.", best: "INTJ", worst: "ISTJ" },
+            "ENTP": { title: "효율 찾아 삼만 리\n'잔머리 대마왕'", icon: "😈", desc: "어떻게 하면 손 안 대고 코 풀까 연구함. 귀찮은 일은 남한테 넘기기 스킬 시전.", best: "INFJ", worst: "ISFJ" },
+            "ESTJ": { title: "쉬는 것도 일이다\n'부지런한 통제광'", icon: "📝", desc: "주말에도 알람 맞추고 일어남. 그냥 멍 때리는 걸 못 견딤. '생산적인 휴식'을 추구함.", best: "ISFP", worst: "INFP" },
+            "ESFJ": { title: "약속 부자\n'프로 참석러'", icon: "📞", desc: "집에 있고 싶은데 누가 부르면 거절 못 하고 나감. 갔다 와서 '아 힘들다' 하고 기절함.", best: "ISTP", worst: "INTP" },
+            "ENFJ": { title: "바쁘다 바빠 현대사회\n'갓생 기획자'", icon: "🏃", desc: "자기 계발하느라 바쁨. 남들이 게으르게 사는 거 보면 잔소리하고 싶어서 입이 근질거림.", best: "INFP", worst: "ISTP" },
+            "ENTJ": { title: "게으름은 죄악\n'워커홀릭'", icon: "🔥", desc: "시간 낭비하는 걸 제일 싫어함. 쉴 때도 관련 서적 읽거나 뉴스 봄. 침대는 잠잘 때만 쓰는 곳.", best: "INTP", worst: "ISFP" }
+        };
+
+        Kakao.init('f68bf1f1c632b1b62c625afe72e43b1d'); 
+        
+        function updateResult() {
+            let type = mbti ? mbti.toUpperCase() : "ENFP"; 
+            if(!resultData[type]) type = "ENFP";
+            const data = resultData[type];
+            
+            document.getElementById('resultTitle').innerText = data.title;
+            document.getElementById('resultIcon').innerText = data.icon;
+            document.getElementById('resultDesc').innerText = data.desc;
+            
+            document.getElementById('bestMatch').innerText = resultData[data.best].title.split('\n')[1].replace(/'/g, '');
+            document.getElementById('worstMatch').innerText = resultData[data.worst].title.split('\n')[1].replace(/'/g, '');
+        }
+
+        function shareResult() {
+            let type = mbti ? mbti.toUpperCase() : "ENFP";
+            const data = resultData[type];
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '나의 게으름 등급은?',
+                    description: data.title.replace('\n', ' ') + ' | ' + data.desc.substring(0, 30) + '...',
+                    imageUrl: 'https://theduck-lab.com/logo.png', 
+                    link: { mobileWebUrl: window.location.href, webUrl: window.location.href },
+                },
+                buttons: [{ title: '결과 보기', link: { mobileWebUrl: window.location.href, webUrl: window.location.href } }]
+            });
+        }
+        updateResult();
+    </script>
+</body>
+</html>
